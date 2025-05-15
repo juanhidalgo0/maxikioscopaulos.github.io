@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "kiosco-web",
+  "private_key_id": "84a589b49130067b649b26d8a9f03230d2b87c8e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzOGzqOJQBFPsr\nJjy2VKDq9mGlPSxKEF476hOalqgPf3Jk3ZgHMb0YZjw8vBQjtaOdWsk5ZtbS1+AO\n9U7lvKmb8U5fQRmX1/WUKNpV2f7ZbO0rQXe8+h4V0VkpBk0gzFhW282UyVykBMQ5\nAnR30oYYFGO4XyW7lPKu/q8C57fzfxwxZ4aIDnZAdZnc0/9ZZtn4Tp3BexsoV9dS\niVbUAPm1SpHaNR844i5qViDv0Cm61nlGjrQIjcLlctD9BhWR9jUpA/p/wiOD5iYC\nVffqlEHevIPBtP+DKOuk4g3e6h1Ns3lYbLnRRVvLhi7kp/YVRT5HRUuURreoLGLt\nhJY133zDAgMBAAECggEAL9FoTf4Wj0tX0KV9IXDnFonyd7IgtQo0+mt0G5UC9k+c\n6Aiv3YuJ1o7Al7ve68A1DXEBq40i2FK894DAMk/qOS9jJ8so1vjKD2PvDWUCuGR1\ny0rGdeeOS2f2EBocThn3oAU5ju9DBog3Crb6+FV1bctS6AiK+se9EK/nZjEJRbA7\nQUoLyH/GyAqrUkish5zCDE9+bWAwRic08g+4jrJUZjrWAH+7fLuogEZNRMJY/7qV\nxyFgPVKr0PhEKYo/aaitJrqA2I3ssxEyEnverpDRzeFAAr1CEn29n6kdE09c0caR\ndIzW7rnjGiHYNTAgD62raa3B8vkS8xeebihfrQcXIQKBgQD0A2k6DFVoPyhryOFa\nduEwBPVesmZux5K5bymLawtfQEw2+sRQ7vOYjebMfeFY/2cg7ApMZFIT9BWxTCJI\n3HuJm1dx+HvN5u2HZakbpLwu5Jj7ZwfMcZdClvcFfdmh7PQOzZi1M3gfFsCqEYw7\nzmAUUUZc/mFpJ03eFq85E2aWewKBgQC8BjYXgbtZYDy0ULv+oCdMLbYkjBmJ/2Py\nn0mAxIk4TOPwxRAQIkxw2far3H2PyWhpsRy7SS+/30vj5yQG+oV9+OeKNhGF8NyN\nV1b2pfM9t2wXa1GRlwhVNB5STm9+2HwkBLCJnXe2C2YeJuAJGmSEtgAqzhH17V/q\nriamK03EWQKBgE7UW0Y5fc3zuWc4ujSzewQ8VdiF4bmgF7J4Sv+TUVUwPG72jD1p\nNKDwFsOxVv+dYv+rwZf0QN/ZVri0U88eC3rlCFb1Y2mdVNcM7JjVm0W67AErw8U0\nXR1SD/NiONCq8B1oJhFD02aXvx4yFQ+tGDT4HLcmJuoFnI5G3cyei+HJAoGBALTv\nXTo9s2YMgB4c2uvqfiaGjpKY5zKuuyWNNxRdDJdLFsZpPE3qU5j9hqxXn9SwQnQC\n5d0sTnDblpIXqcm1ZqSU02tjIHW+FN9Gvv7XLz2itrfKpFHv/yrO3qbhp9Vuyfd3\nM9MZ30slqP0297yK01QKOBr49rur0/Nn5vVdEpbxAoGAZZZ37yMonLprnWFpwlvi\noUejcrvr10mpyukJ6q16NsYztobygh+vNv0wJq/22JEGkUGhvMjjmFLyxHFjMBG6\nvokv0ZlYwSleppQFfUh5oIFuFzjM0v0ccNO8wpOdQf4Ai2ERQW5NI8nP5Wz5EtBk\namYWrVL2Il2qED9hnGWX3lU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@kiosco-web.iam.gserviceaccount.com",
+  "client_id": "101263837341790077520",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40kiosco-web.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
