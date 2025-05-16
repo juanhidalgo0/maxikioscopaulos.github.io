@@ -13,74 +13,71 @@
 
 <body>
 
+<!-- Poner overlay FUERA del header -->
+<div id="overlay"></div>
   <!-- Header principal -->
-  <header class="header">
-    <div class="container logo-nav-container">
-      <h1>Maxikiosco Paulos</h1>
-    </div>
-  </header>
+   
+<header class="header">
+  <div class="nav">
+    <!-- Ícono del menú y menú desplegable juntos -->
+    <div class="menu-wrapper">
+      <div class="menu-icon" id="menuToggle">☰</div>
 
-  <!-- Barra de categorías fija -->
-  <div class="categorias">
-    <nav class="navigation">
-      <ul>
-        <li><a href="/categoriasIndex/bebidas.html">Bebidas</a></li>
-        <li><a href="/categoriasIndex/alimentos.html">Alimentos</a></li>
-        <li><a href="/categoriasIndex/golosinas.html">Golosinas</a></li>
-        <li><a href="/categoriasIndex/cigarrillos.html">Cigarrillos</a></li>
-        <li><a href="/categoriasIndex/tabaqueria.html">Tabaquería</a></li>
-        <li><a href="/categoriasIndex/perfumeria.html">Perfumería</a></li>
-        <li><a href="/categoriasIndex/farmacia.html">Farmacia</a></li>
+<nav class="menu" id="menu">
+  <ul>
+    <li id="menu-bebidas" class="menu-item">
+      <a href="#">Bebidas</a>
+      <ul id="submenu-bebidas" class="sub-menu-fixed">
+        <li><p>Almacén</p></li>
+        <li><a href="#" onclick="filtrarCategoria('todos')">Ver todos</a></li>
+        <li><a href="#" onclick="filtrarCategoria('Cerveza')">Cerveza</a></li>
+        <li><a href="#" onclick="filtrarCategoria('Gaseosas')">Gaseosas</a></li>
+        <li><a href="#" onclick="filtrarCategoria('Jugos')">Jugos</a></li>
+        <li><a href="#" onclick="filtrarCategoria('Vinos')">Vinos</a></li>
       </ul>
-      
-    </nav>
+    </li>
     
-<!-- Botón del carrito -->
-<div id="carrito-container">
-  <button id="abrir-carrito">
-    <i class="fas fa-shopping-cart"></i>
-    <span id="contador-carrito">0</span>
-  </button>
-</div>
+    <li class="menu-item"><a href="#">Alimentos</a></li>
+    <li class="menu-item"><a href="#">Golosinas</a></li>
+    <!-- otras categorías -->
+  </ul>
+</nav>
 
-<!-- Modal del carrito -->
-<div id="carrito-modal" class="modal">
-  <div class="modal-contenido">
-    <span class="cerrar" id="cerrar-carrito">&times;</span>
-    <h2>Tu Carrito</h2>
-    <div id="carrito-items"></div>
-    <p id="total-carrito">Total: $0.00</p>
-    <button id="pagar-btn">Pagar</button>
+    </div>
+
+    <!-- Contenedor de barra + carrito -->
+    <div class="right-group">
+      <div class="barra-busqueda-productos">
+        <input type="text" id="busqueda-productos" placeholder="Buscar producto...">
+      </div>
+      <div id="carrito-container">
+        <button id="abrir-carrito">
+          <i class="fas fa-shopping-cart"></i>
+          <span id="contador-carrito">0</span>
+        </button>
+      </div>
+    </div>
   </div>
-</div>
+</header>
 
 
+ <!-- Sidebar del carrito -->
+
+  <div id="carrito-sidebar">
+    <div class="carrito-contenido">
+      <span class="cerrar" id="cerrar-carrito">&times;</span>
+      <h2>Carrito</h2>
+      <div id="carrito-items"></div>
+      <p id="total-carrito">Total: $0.00</p>
+      <button id="pagar-btn">Pagar</button>
+    </div>
   </div>
 
-  <!-- Controles de búsqueda -->
-  <div class="controls" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; position: relative;">
-    <input type="text" id="barraBusqueda" placeholder="Buscar producto..." style="padding: 8px; border-radius: 5px;" />
-    <select id="ordenar" style="padding: 8px; border-radius: 5px;">
-      <option value="">Ordenar por precio</option>
-      <option value="asc">Menor a mayor</option>
-      <option value="desc">Mayor a menor</option>
-    </select>
-  </div>
+
 
   <!-- Sidebar de navegación de productos -->
 <!-- Sidebar principal con categorías -->
-<div class="sidebar">
-  <nav class="navigation-productos">
-    <!-- Menú principal de categorías -->
-    <ul>
-      <li><button  onclick="filtrarCategoria('todos')"><i class="fas fa-hand-point-right"></i> Ver todos </button onclick="agregarAlCarrito(this)"></li>
-      <li><button  onclick="filtrarCategoria('Cerveza')"><i class="fas fa-hand-point-right"></i> Cerveza</button onclick="agregarAlCarrito(this)"></li>
-      <li><button  onclick="filtrarCategoria('Gaseosas')"><i class="fas fa-hand-point-right"></i> Gaseosas</button onclick="agregarAlCarrito(this)"></li>
-      <li><button  onclick="filtrarCategoria('Jugos')"><i class="fas fa-hand-point-right"></i> Jugos</button onclick="agregarAlCarrito(this)"></li>
-      <li><button  onclick="filtrarCategoria('Vinos')"><i class="fas fa-hand-point-right"></i> Vinos</button onclick="agregarAlCarrito(this)"></li>
-    </ul>
-  </nav>
-</div>
+
 
 
 
@@ -88,16 +85,10 @@
 
   
 
-
-  <main class="main">
     <div class="container">
       
       <!-- Sidebar de subcategorías -->
 <div id="submenu-categorias" class="subcategoria-sidebar">
-</div>
-
-<div class="barra-busqueda-productos">
-  <input type="text" id="busqueda-productos" placeholder="Buscar producto...">
 </div>
 
 
@@ -693,7 +684,7 @@
         <!-- Aquí se insertan dinámicamente los productos o manualmente como en tu código -->
       </div>
     </div>
-  </main>
+
 
   <!-- Footer -->
   <footer class="footer">

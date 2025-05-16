@@ -48,25 +48,59 @@
     });
   });
 
-/*Carrito*/
 
-document.addEventListener("DOMContentLoaded", () => {
-  const carrito = [];
-  const abrirCarrito = document.getElementById("abrir-carrito");
-  const modal = document.getElementById("carrito-modal");
-  const cerrarCarrito = document.getElementById("cerrar-carrito");
-  const carritoItems = document.getElementById("carrito-items");
-  const totalCarrito = document.getElementById("total-carrito");
-  const pagarBtn = document.getElementById("pagar-btn");
 
-  // Abrir modal
-  abrirCarrito.addEventListener("click", () => modal.style.display = "block");
+/*Menú-nav*/
+// script.js
 
-  // Cerrar modal
-  cerrarCarrito.addEventListener("click", () => modal.style.display = "none");
-  window.addEventListener("click", e => {
-    if (e.target === modal) modal.style.display = "none";
+
+  const menuToggle = document.getElementById('menuToggle');
+  const menu = document.getElementById('menu');
+
+  menuToggle.addEventListener('click', () => {
+    menu.classList.toggle('abierto');
   });
+
+/*Submenu-nav*/
+;
+  const menuBebidas = document.getElementById('menu-bebidas');
+  const submenuBebidas = document.getElementById('submenu-bebidas');
+  const otherMenuItems = [...document.querySelectorAll('.menu-item')].filter(item => item !== menuBebidas);
+
+  // Mostrar submenú al pasar el mouse por "Bebidas"
+  menuBebidas.addEventListener('mouseenter', () => {
+    submenuBebidas.classList.add('show');
+  });
+
+  // Mantenerlo abierto si el mouse está dentro del submenú
+  submenuBebidas.addEventListener('mouseenter', () => {
+    submenuBebidas.classList.add('show');
+  });
+
+  // Si el mouse sale del submenú, no hacemos nada todavía
+
+  // Cuando el mouse entra a otra categoría, cerramos el submenú
+  otherMenuItems.forEach(item => {
+    item.addEventListener('mouseenter', () => {
+      submenuBebidas.classList.remove('show');
+    });
+  });
+
+  // También cerramos si el mouse sale completamente del menú (opcional)
+  menu.addEventListener('mouseleave', () => {
+    submenuBebidas.classList.remove('show');
+  });
+
+
+
+  // Opcional: cerrar el menú al hacer clic fuera
+  document.addEventListener('click', (e) => {
+    if (!menu.contains(e.target) && e.target !== menuToggle) {
+      menu.classList.remove('abierto');
+    }
+  });
+
+
 
   // Agregar al carrito
   document.querySelectorAll(".producto button").forEach((boton, index) => {
@@ -100,23 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
     totalCarrito.textContent = `Total: $${total.toFixed(2)}`;
   }
 
-  // Botón pagar - enviar a WhatsApp
-  pagarBtn.addEventListener("click", () => {
-    if (carrito.length === 0) return alert("El carrito está vacío.");
-
-    let mensaje = "*¡Hola! Quiero hacer este pedido:*\n\n";
-    carrito.forEach((item, i) => {
-      mensaje += `• ${item.nombre} - $${item.precio.toFixed(2)}\n`;
-    });
-
-    const total = carrito.reduce((acc, item) => acc + item.precio, 0);
-    mensaje += `\n*Total: $${total.toFixed(2)}*`;
-
-    const telefono = "542221430320"; // Cambia esto por tu número
-    const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
-    window.open(url, "_blank");
-  });
-});
 
 /*Agregar Btn*/
 
@@ -341,11 +358,39 @@ document.addEventListener("DOMContentLoaded", () => {
   const pagarBtn = document.getElementById("pagar-btn");
 
   // Abrir y cerrar modal del carrito
-  abrirCarrito.addEventListener("click", () => modal.style.display = "block");
-  cerrarCarrito.addEventListener("click", () => modal.style.display = "none");
-  window.addEventListener("click", e => {
-    if (e.target === modal) modal.style.display = "none";
-  });
+
+const carritoSidebar = document.getElementById("carrito-sidebar");
+
+abrirCarrito.addEventListener("click", () => {
+  carritoSidebar.classList.add("abierto");
+});
+
+cerrarCarrito.addEventListener("click", () => {
+  carritoSidebar.classList.remove("abierto");
+});
+
+const abrirCarritoBtn = document.getElementById('abrir-carrito');
+const cerrarCarritoBtn = document.getElementById('cerrar-carrito');
+const overlay = document.getElementById('overlay');
+const header = document.querySelector('.header');
+
+abrirCarritoBtn.addEventListener('click', () => {
+  carritoSidebar.classList.add('active');
+  overlay.classList.add('active');
+  header.classList.add('opaco');
+});
+
+cerrarCarritoBtn.addEventListener('click', () => {
+  carritoSidebar.classList.remove('active');
+  overlay.classList.remove('active');
+  header.classList.remove('opaco');
+});
+
+// También cerramos el sidebar si se clickea el overlay
+overlay.addEventListener('click', () => {
+  carritoSidebar.classList.remove('active');
+  overlay.classList.remove('active');
+});
 
   // Función para actualizar contador sumando cantidades
   function actualizarContador() {
@@ -461,20 +506,26 @@ function eliminarUnidad(nombre) {
     });
   });
 
-  // Botón pagar - enviar a WhatsApp
-  pagarBtn.addEventListener("click", () => {
-    if (carrito.length === 0) return alert("El carrito está vacío.");
 
-    let mensaje = "*¡Hola! Quiero hacer este pedido:*\n\n";
-    carrito.forEach(item => {
-      mensaje += `• ${item.nombre} x${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}\n`;
-    });
+   // Botón pagar - enviar a WhatsApp
+pagarBtn.addEventListener("click", () => {
+  if (carrito.length === 0) return alert("El carrito está vacío.");
 
-    const total = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
-    mensaje += `\n*Total: $${total.toFixed(2)}*`;
-
-    const telefono = "542221430320"; // Cambia esto por tu número
-    const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
-    window.open(url, "_blank");
+  let mensaje = "*¡Hola! Quiero hacer este pedido:*\n\n";
+  carrito.forEach((item, i) => {
+    mensaje += `• ${item.nombre} - $${item.precio.toFixed(2)}\n`;
   });
+
+  const total = carrito.reduce((acc, item) => acc + item.precio, 0);
+  mensaje += `\n*Total: $${total.toFixed(2)}*`; 
+  mensaje += `\n*Costo de envío adicional*`;
+  mensaje += `\n\nMi dirección es: (mandanos tu direc)`;
+
+
+  const telefono = "+542221440844"; // Cambia esto por tu número
+  const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
+  window.open(url, "_blank");
 });
+
+});
+

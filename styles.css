@@ -1,4 +1,21 @@
 /* Reset y base */
+#overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 9998;
+}
+
+#overlay.active {
+  opacity: 1;
+  pointer-events: auto; /* ahora sí puede recibir clicks (para cerrar) */
+}
+
 body {
   background-color: #ffcdee;
   font-family: Georgia, 'Times New Roman', Times, serif;
@@ -24,98 +41,310 @@ p {
   max-width: 1600px;
   margin: 0 auto;
   text-align: center;
+    display: flex;
+  flex-wrap: wrap;
+    justify-content: center; /* Centra horizontalmente */
 }
 
 /* Header */
-header {
-  background: rgb(97, 12, 97);
-  color: white;
-  padding: 1rem 0;
+.header {
   position: fixed;
-  top: 0;
-  left: 0;
   right: 0;
-  z-index: 99;
-}
-
-.logo-nav-container {
+  left: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 10px 20px;
+  background-color: #e60000;
+  color: white;
   flex-wrap: wrap;
+  z-index: 9997;
 }
-
+.header .opaco{
+  opacity: 0.7;
+}
 .header a {
   color: white;
   text-decoration: none;
 }
 
-.controls {
-  float: right;
-  margin-right: 3rem;
-}
-
-/* Categorías fijas */
-.categorias {
+/* Contenedor principal */
+.header {
   position: fixed;
-  top: 4.2rem;
-  background-color: #48074b;
-  width: 100%;
-  text-align: center;
-  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #61136b;
+  color: white;
+  padding: 10px 20px;
 }
-
-.navigation ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  text-align: center;
+.header-center {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10%;
+  width: 80%;
 }
-
-.navigation ul li {
-  display: inline-block;
-  padding: 0.5em;
-  width: 11rem;
+.nav {
+  width: 80%;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
 }
-
-.navigation ul li a {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  display: block;
-  padding: 0.5rem 1rem;
+/* LOGO */
+.logo a {
+  color: white;
+  font-weight: bold;
   text-decoration: none;
-  color: #fff;
-  background-color: #da4daf;
-  font-size: 1.5rem;
-  border-radius: 5px;
-  transition: all 0.3s linear;
+  font-size: 20px;
 }
 
-.navigation ul li a:hover {
-  background: #c928a0;
+
+/* Contenedor de barra y carrito a la derecha */
+.right-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
-/* Sidebar */
-.sidebar {
+
+
+/* Ícono menú */
+.menu-icon {
+  font-size: 26px;
+  cursor: pointer;
+  user-select: none;
+  display: block;
+  
+}
+
+/* Estilos base del menú oculto */
+.menu-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.menu {
+  position: absolute;
+  top: 100%; /* Justo debajo del ícono */
+  left: 0;
+  width: 200px;
+  max-height: 0;
+  overflow: hidden;
+  background-color: #fff;
+  border: none;
+  box-shadow: none;
+  transition: max-height 0.4s ease;
+  z-index: 1000;
+}
+
+/* Estilo cuando el menú está visible */
+.menu.abierto {
+  max-height: 500px;
+    border: 1px solid #ccc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilo opcional para los <ul> y <li> */
+.menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 10px;
+}
+
+.menu ul li {
+  margin: 10px 0;
+}
+
+.menu ul a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Estilo del ítem con submenú */
+.menu-item-con-submenu-wrapper {
+  position: relative;
+}
+
+.sub-menu-fixed {
   position: fixed;
-  margin-top: 4em;
-  width: 10em;
-  background-color: #e8a2ee;
-  height: 100vh;
-  float: left;
-  padding-top: 8rem; /* si usás header fijo */
-  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  top: 2.2em;
+  left: 21.3em;
+  background: #fff;
+  border: 1px solid #ccc;
+  display: none;
+  min-width: 200px;
+  z-index: 2000;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.sub-menu-fixed.show {
+  display: block;
+}
+
+
+/* Mostrar submenú cuando el mouse está en el contenedor entero */
+.menu-item-con-submenu-wrapper:hover .sub-menu-fixed {
+  display: block;
+}
+
+.sub-menu-fixed li a {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+}
+.sub-menu-fixed li p {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #000;
+    color: #333;
+  display: block;
+  margin-left: .8em;
+  top: 0;
+    text-decoration: none;
+}
+
+.sub-menu-fixed li a:hover {
+  background-color: #f0f0f0;
+}
+
+
+/* Mostrar submenú al hacer hover sobre el item principal */
+.menu-item-con-submenu:hover .sub-menu {
+  display: block;
+}
+
+/* Estilo para los ítems del submenú */
+.sub-menu li a {
+  display: block;
+  padding: 8px 12px;
+  color: #333;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.sub-menu li a:hover {
+  background-color: #f0f0f0;
+}
+
+/* Estilo del contenido */
+.sub-menu-bebidas ul {
+  list-style: none;
+  margin: 0;
+  padding: 10px;
+}
+
+.sub-menu-bebidas button {
+  background: none;
+  border: none;
+  padding: 8px;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sub-menu-bebidas button:hover {
+  background-color: #f0f0f0;
+}
+
+/* Barra de búsqueda */
+.barra-busqueda-productos input {
+  width: 50em;
+  padding: 6px 10px;
+  border-radius: 100px;
+  border: none;
+  font-size: 14px;
+  margin-right: 10rem;
+}
+
+/*Carrito*/ 
+#carrito-container button {
+  background: white;
+  color: #e60000;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+#abrir-carrito {
+  position: relative;
+  background: #610c61;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 10px rgba(97,12,97,0.6);
+  transition: background-color 0.3s ease;
+}
+
+#abrir-carrito:hover {
+  background: #9a2da1;
+}
+
+#contador-carrito {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #28a745;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  user-select: none;
+  box-shadow: 0 0 5px #28a745;
+}
+
+
+/* ==================== Carrito Sidebar ==================== */
+/* Sidebar */
+#carrito-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 300px;
+  background-color: white;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 9999;
+  color: #000;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+#carrito-sidebar.active {
+  transform: translateX(0);
+}
+/* Estilo base (ya está bien configurado) */
 .navigation-productos ul {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 12px; /* Espacio entre botones */
   padding: 0;
-  margin-left: .3em;
+  margin-left: 0.3em;
   list-style: none;
   width: 93%;
 }
 
+/* Botones (se mantienen igual) */
 .navigation-productos button {
   width: 100%;
   padding: 12px;
@@ -176,28 +405,16 @@ header {
   transform: translateX(5px);
 }
 
-/* Barra Busqueda */
-
-.barra-busqueda-productos {
-  margin-top: .5em;
-}
-
-.barra-busqueda-productos input {
-  padding: 8px 12px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  width: 250px;
-  outline: none;
-}
-
 /* Productos */
 .main {
   padding-top: 10rem;
   margin-top: 6em;
+  display: flex;
+  justify-content: center;
 }
 
 .productos {
+  margin-top: 5em;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -297,6 +514,7 @@ html, body {
 }
 
 .main {
+  background-color: #28a745;
   margin-left: 220px; /* ancho del sidebar */
   padding-top: 0; /* elimina padding-top */
 }
@@ -304,76 +522,29 @@ body.sidebar-activo .main {
   margin-left: 220px; /* mismo ancho que el sidebar */
 }
 
-/*carrito*/
-#carrito-container {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 1000;
+
+
+
+
+/* ==================== Contenido Principal ==================== */
+.main,
+.container {
+  transition: margin-right 0.4s ease-in-out;
 }
 
-#abrir-carrito {
-  position: relative;
-  background: #610c61;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 30px;
-  cursor: pointer;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 10px rgba(97,12,97,0.6);
-  transition: background-color 0.3s ease;
-}
-
-#abrir-carrito:hover {
-  background: #9a2da1;
-}
-
-#contador-carrito {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background: #28a745;
-  color: white;
-  font-weight: bold;
-  font-size: 12px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
-  user-select: none;
-  box-shadow: 0 0 5px #28a745;
-}
-
-/* Modal estilos */
-.modal {
-  display: none; /* Oculto por defecto */
-  position: fixed;
-  z-index: 1100;
-  left: 0;
-  top: 0;
-  width: 100%;
+.carrito-contenido {
+  padding: 1rem;
   height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+}
+.carrito-contenido .cerrar {
+  font-size: 24px;
+  cursor: pointer;
+  align-self: flex-end;
+  margin-bottom: 10px;
 }
 
-.modal-contenido {
-  background-color: #fefefe;
-  margin: 5% auto;
-  padding: 20px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  position: relative;
-}
 
 .cerrar {
   color: #aaa;
@@ -467,3 +638,8 @@ body.sidebar-activo .main {
   50% { transform: scale(1.3); }
   100% { transform: scale(1); }
 }
+
+
+
+
+
