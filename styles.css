@@ -18,7 +18,7 @@
 
 body {
   background-color: #ffcdee;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color: #333;
   font-size: 1.2rem;
   line-height: 1.6em;
@@ -111,17 +111,18 @@ p {
 
 /* Ícono menú */
 .menu-icon {
-  font-size: 26px;
+  font-size: 1.5em;
   cursor: pointer;
   user-select: none;
   display: block;
-  
+
 }
 
 /* Estilos base del menú oculto */
 .menu-wrapper {
   position: relative;
   display: inline-block;
+  
 }
 .menu {
   position: absolute;
@@ -131,9 +132,9 @@ p {
   max-height: 0;
   overflow: hidden;
   background-color: #fff;
-  border: none;
+  border-radius: none;
   box-shadow: none;
-  transition: max-height 0.4s ease;
+  transition: max-height 0.2s ease;
   z-index: 1000;
 }
 
@@ -149,10 +150,17 @@ p {
   list-style: none;
   margin: 0;
   padding: 10px;
+  justify-content: center;
+  text-align: center;
+  border-radius: 5%;
+}
+.menu ul li:hover{
+  background-color: rgb(247, 235, 237);
 }
 
 .menu ul li {
   margin: 10px 0;
+  border-radius: .5em;
 }
 
 .menu ul a {
@@ -169,7 +177,7 @@ p {
 .sub-menu-fixed {
   position: fixed;
   top: 2.2em;
-  left: 21.3em;
+  left: 21em;
   background: #fff;
   border: 1px solid #ccc;
   display: none;
@@ -196,16 +204,9 @@ p {
 }
 .sub-menu-fixed li p {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  color: #000;
     color: #333;
   display: block;
-  margin-left: .8em;
-  top: 0;
-    text-decoration: none;
-}
 
-.sub-menu-fixed li a:hover {
-  background-color: #f0f0f0;
 }
 
 
@@ -247,10 +248,12 @@ p {
 .sub-menu-bebidas button:hover {
   background-color: #f0f0f0;
 }
-
+.barra-busqueda-productos{
+  width: 100%;
+}
 /* Barra de búsqueda */
 .barra-busqueda-productos input {
-  width: 50em;
+  width: 100%;
   padding: 6px 10px;
   border-radius: 100px;
   border: none;
@@ -268,6 +271,7 @@ p {
   font-size: 16px;
   cursor: pointer;
   flex: 0 0 auto;
+  margin-left: 2em;
 }
 
 #abrir-carrito {
@@ -366,22 +370,19 @@ p {
 
 /* Subcategorías */
 
-.subcategoria-activa {
-  background-color: #d864c8 !important;
-  color: white;
-  transform: scale(0.9); 
-}
-
 .subcategoria-sidebar {
-  position: relative;
   width: 100%;
   padding: .5rem;
+  margin-bottom: 1.5rem;
   display: none;
-  flex-direction: row;
   flex-wrap: wrap;
-  gap: 10px;
-  z-index: 91;
   justify-content: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+  position: relative; /* para estar por encima de productos */
+  z-index: 10;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
 }
 
 .subcategoria-sidebar.show {
@@ -391,34 +392,50 @@ p {
 .subcategoria-sidebar button {
   background: rgb(97, 12, 97);
   color: white;
-  padding: 12px;
+  padding: 0.6em 1.2em;
   border: none;
   border-radius: 8px;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  flex: 1 0 auto; /* permite que los botones crezcan y se envuelvan */
+  max-width: 150px;
 }
 
 .subcategoria-sidebar button:hover {
   background: rgb(145, 20, 145);
-  transform: translateX(5px);
+  transform: translateY(-2px);
 }
+
+/* Responsive móvil */
+@media (max-width: 600px) {
+  .subcategoria-sidebar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .subcategoria-sidebar button {
+    width: 90%;
+    max-width: none;
+  }
+}
+
 
 /* Productos */
 .main {
   padding-top: 10rem;
-  margin-top: 6em;
   display: flex;
   justify-content: center;
 }
 
 .productos {
-  margin-top: 5em;
+
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
+
 }
 
 .productos ul {
@@ -530,6 +547,7 @@ body.sidebar-activo .main {
 .main,
 .container {
   transition: margin-right 0.4s ease-in-out;
+   margin-top: var(--header-height, 80px);
 }
 
 .carrito-contenido {

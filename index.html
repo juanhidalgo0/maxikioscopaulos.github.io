@@ -21,16 +21,16 @@
   <div class="nav">
     <!-- Ícono del menú y menú desplegable juntos -->
     <div class="menu-wrapper">
-      <div class="menu-icon" id="menuToggle">☰</div>
+      <div class="menu-icon" id="menuToggle">☰ Categorias</div>
 
 <nav class="menu" id="menu">
   <ul>
     <li id="menu-bebidas" class="menu-item">
       <a href="#">Bebidas</a>
       <ul id="submenu-bebidas" class="sub-menu-fixed">
-        <li><p>Almacén</p></li>
+
         <li><a href="#" onclick="filtrarCategoria('todos')">Ver todos</a></li>
-        <li><a href="#" onclick="filtrarCategoria('Cerveza')">Cerveza</a></li>
+        <li><a onclick="filtrarCategoria('Cerveza')">Cerveza</a></li>
         <li><a href="#" onclick="filtrarCategoria('Gaseosas')">Gaseosas</a></li>
         <li><a href="#" onclick="filtrarCategoria('Jugos')">Jugos</a></li>
         <li><a href="#" onclick="filtrarCategoria('Vinos')">Vinos</a></li>
@@ -58,6 +58,8 @@
       </div>
     </div>
   </div>
+        <!-- Sidebar de subcategorías -->
+
 </header>
 
 
@@ -87,12 +89,12 @@
 
     <div class="container">
       
-      <!-- Sidebar de subcategorías -->
+
 <div id="submenu-categorias" class="subcategoria-sidebar">
 </div>
 
-
       <div class="productos" id="productos-container">
+        
   <ul class="producto" data-nombre="BRAHMA LATA X473" data-categoria="Cerveza"  data-subcategoria="Latas">
           <li><img src="./img/Productos/Bebidas/Cervezas/latas/brahma.jpg" alt="Brahma 473"></li>
           <li><p class="nombre">Brahma Lata x473</p></li>
