@@ -4,16 +4,16 @@
   top: 0; left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0, 0, 0, 0.4);
   opacity: 0;
   pointer-events: none;
+  z-index: 500; /* MENOR que el menú y el ícono */
   transition: opacity 0.3s ease;
-  z-index: 9998;
 }
 
 #overlay.active {
   opacity: 1;
-  pointer-events: auto; /* ahora sí puede recibir clicks (para cerrar) */
+  pointer-events: auto;
 }
 
 body {
@@ -23,6 +23,7 @@ body {
   font-size: 1.2rem;
   line-height: 1.6em;
   margin: 0;
+  height: 100%;
 }
 
 h1 {
@@ -49,16 +50,15 @@ p {
 /* Header */
 .header {
   position: fixed;
-  right: 0;
+  top: 0;
   left: 0;
+  right: 0;
+  height: 70px;
+  background-color: #61136b;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #e60000;
-  color: white;
-  flex-wrap: wrap;
-  z-index: 9997;
+  align-items: center; /* ✅ centra verticalmente */
+  padding: 0 20px;
+  z-index: 9999;
 }
 .header .opaco{
   opacity: 0.7;
@@ -72,25 +72,20 @@ p {
 .header {
   position: fixed;
   display: flex;
-  align-items: center;
+  align-items:center;
   justify-content: center;
   background-color: #61136b;
   color: white;
   padding: 10px 20px;
 }
-.header-center {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10%;
-  width: 80%;
-}
+
 .nav {
-  width: 80%;
-  position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* ✅ separa menu-icon y right-group */
+  align-items: center;
+  width: 100%;
 }
+
 /* LOGO */
 .logo a {
   color: white;
@@ -101,21 +96,57 @@ p {
 
 
 /* Contenedor de barra y carrito a la derecha */
+
 .right-group {
   display: flex;
-  align-items: center;
+  align-items: center; /* ✅ centra verticalmente búsqueda y carrito */
   gap: 15px;
 }
 
 
 
 /* Ícono menú */
-.menu-icon {
-  font-size: 1.5em;
-  cursor: pointer;
-  user-select: none;
-  display: block;
 
+.menu-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.menu-icon span {
+  display: block;
+  height: 4px;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Animación cuando el menú está abierto */
+.menu-icon.activo span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+  background-color: #9a2da1; /* violeta */
+}
+
+.menu-icon.activo span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-icon.activo span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+  background-color: #9a2da1; /* violeta */
+}
+
+
+
+/* Efecto de opacidad en el resto del contenido */
+body.menu-activo .main,
+body.menu-activo .container,
+body.menu-activo .header {
+  opacity: 0.5;
+  pointer-events: none; /* evita que se haga clic en el fondo */
 }
 
 /* Estilos base del menú oculto */
@@ -124,25 +155,34 @@ p {
   display: inline-block;
   
 }
-.menu {
-  position: absolute;
-  top: 100%; /* Justo debajo del ícono */
-  left: 0;
-  width: 200px;
-  max-height: 0;
-  overflow: hidden;
-  background-color: #fff;
-  border-radius: none;
-  box-shadow: none;
-  transition: max-height 0.2s ease;
-  z-index: 1000;
-}
+  .menu {
+    display: flex;
+    justify-content: center;
 
+    left: -100%;
+    top: 8.6%;
+    position: fixed;
+
+
+    width: 13.3%;
+    height: 100vh;
+    background-color: #ffffff;
+    z-index: 1;
+    transition: left 0.4s ease;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+    overflow: hidden;
+  }
+
+  .menu h2{
+    color: #9a2da1;
+  }
 /* Estilo cuando el menú está visible */
 .menu.abierto {
-  max-height: 500px;
+  left: 0;
+   transform: scale(1);
     border: 1px solid #ccc;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow: visible;
 }
 
 /* Estilo opcional para los <ul> y <li> */
@@ -150,70 +190,162 @@ p {
   list-style: none;
   margin: 0;
   padding: 10px;
-  justify-content: center;
   text-align: center;
-  border-radius: 5%;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 .menu ul li:hover{
   background-color: rgb(247, 235, 237);
 }
-
+.menu.abierto ul{
+  opacity:1;
+}
 .menu ul li {
-  margin: 10px 0;
-  border-radius: .5em;
+  position: relative; /* Para que el submenu se posicione respecto a este */
+  margin: 0;
+
 }
 
-.menu ul a {
+
+.menu ul li a {
   text-decoration: none;
   color: #333;
   font-weight: bold;
 }
 
 /* Estilo del ítem con submenú */
+
+
 .menu-item-con-submenu-wrapper {
   position: relative;
 }
 
+/*SUBMENU HEADER*/
+
+/*SUBMENU*/ 
+
 .sub-menu-fixed {
   position: fixed;
-  top: 2.2em;
-  left: 21em;
-  background: #fff;
-  border: 1px solid #ccc;
+  top: 0; /* debajo del header */
+  left: 95%;
+  width: 80%; /* igual al ancho del menú */
+  height: calc(100vh - 70px);
+  background: white;
   display: none;
-  min-width: 200px;
-  z-index: 2000;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  flex-direction: column;
+  padding: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  overflow-y: auto;
+  transition: transform 0.3s ease;
 }
 
-.sub-menu-fixed.show {
-  display: block;
-}
+.sub-menu-fixed li {
+  position: relative;
+  border-top: 1px solid #d6d6d6;
 
-
-/* Mostrar submenú cuando el mouse está en el contenedor entero */
-.menu-item-con-submenu-wrapper:hover .sub-menu-fixed {
-  display: block;
 }
 
 .sub-menu-fixed li a {
-  display: block;
-  padding: 10px 15px;
-  color: #333;
+  display: flex;
+  justify-content: center; /* centrar el contenido principal */
+  align-items: center;
+  padding: 0.75rem 1rem;
+  font-weight: bold;
   text-decoration: none;
+  color: inherit;
+  position: relative;
 }
-.sub-menu-fixed li p {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: #333;
+
+.sub-menu-fixed li a i {
+  color: #610c61;
+  font-size: 1.2rem;
+  position: absolute;
+  right: 1rem;
+}
+
+/*SUBMENU-HEADER*/
+.submenu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem; /* Igual que los enlaces */
+  margin-bottom: 0.5rem;
+}
+.submenu-header h2 {
+  color: #a91d76;
+  font-size: 100%;
+}
+.submenu-header:hover{
+  background-color: inherit;
+}
+.sub-menu-fixed li a {
+  padding: 0.75rem 1rem; /* Asegura que coincida con .submenu-header */
+}
+
+.submenu-header .volver-btn,
+.submenu-header .ver-todos-btn {
+  flex: 1;
+  text-align: center;
+  padding: 0;
+  font-size: 14px;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: #c300ff;
+  max-width: 48%;
+}
+
+.volver-btn{
+  display:none;
+}
+
+/*SUBMENU-CATEGORIAS*/
+#submenu-categorias {
+  display: none;
+  background-color: #ffffff;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+#submenu-categorias.show {
+  display: flex;
+}
+
+
+#submenu-categorias button {
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: #ffffff;
+  color: #610c61;
+  border: 1px solid #d6d6d6;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#submenu-categorias button:hover {
+  background-color: #ffe0f5;
+}
+
+/* Mostrar submenú */
+
+.sub-menu-fixed.show,
+.sub-menu-fixed.show-mobile {
+  display: flex;
+}
+
+
+.menu-item-con-submenu-wrapper:hover .sub-menu-fixed{
   display: block;
-
 }
 
-
-/* Mostrar submenú al hacer hover sobre el item principal */
-.menu-item-con-submenu:hover .sub-menu {
-  display: block;
-}
 
 /* Estilo para los ítems del submenú */
 .sub-menu li a {
@@ -224,9 +356,7 @@ p {
   white-space: nowrap;
 }
 
-.sub-menu li a:hover {
-  background-color: #f0f0f0;
-}
+
 
 /* Estilo del contenido */
 .sub-menu-bebidas ul {
@@ -245,20 +375,24 @@ p {
   cursor: pointer;
 }
 
-.sub-menu-bebidas button:hover {
-  background-color: #f0f0f0;
-}
+
+
+
+
 .barra-busqueda-productos{
   width: 100%;
+
 }
+
+
 /* Barra de búsqueda */
+
 .barra-busqueda-productos input {
-  width: 100%;
-  padding: 6px 10px;
-  border-radius: 100px;
+  height: 100%;
+  padding: 6px 12px;
+  border-radius: 20px;
   border: none;
   font-size: 14px;
-  margin-right: 10rem;
 }
 
 /*Carrito*/ 
@@ -368,58 +502,7 @@ p {
   transform: translateX(5px);
 }
 
-/* Subcategorías */
 
-.subcategoria-sidebar {
-  width: 100%;
-  padding: .5rem;
-  margin-bottom: 1.5rem;
-  display: none;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-  box-sizing: border-box;
-  position: relative; /* para estar por encima de productos */
-  z-index: 10;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-}
-
-.subcategoria-sidebar.show {
-  display: flex;
-}
-
-.subcategoria-sidebar button {
-  background: rgb(97, 12, 97);
-  color: white;
-  padding: 0.6em 1.2em;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  flex: 1 0 auto; /* permite que los botones crezcan y se envuelvan */
-  max-width: 150px;
-}
-
-.subcategoria-sidebar button:hover {
-  background: rgb(145, 20, 145);
-  transform: translateY(-2px);
-}
-
-/* Responsive móvil */
-@media (max-width: 600px) {
-  .subcategoria-sidebar {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .subcategoria-sidebar button {
-    width: 90%;
-    max-width: none;
-  }
-}
 
 
 /* Productos */
@@ -657,7 +740,74 @@ body.sidebar-activo .main {
   100% { transform: scale(1); }
 }
 
+.categoria-cerveza,
+.categoria-gaseosas,
+.categoria-cigarrillos {
+  display: contents;
+}
+
+@media (max-width: 768px) {
+    .menu {
+    display: flex;
+    justify-content: center;
+    left: -100%;
+    position: fixed;
+    width: 80%;
+    height: 100vh;
+    background-color: #ffffff;
+    z-index: 1;
+    transition: left 0.4s ease;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+    overflow: hidden;
+  }
+  .menu.abierto {
+    left: 0;
+  }
 
 
+  .menu ul {
+  list-style: none;
+  margin: 0;
+  justify-content: center;
+  text-align: center;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.menu ul li:hover{
+  background-color: rgb(247, 235, 237);
+}
+.menu.abierto ul{
+  opacity:1;
+}
+.menu ul li {
+  position: relative; /* Para que el submenu se posicione respecto a este */
+  margin: 0px 0;
+}
 
+
+.menu ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+.submenu-header{
+  display: flex;
+}
+.menu-item-con-submenu-wrapper:hover .sub-menu-fixed{
+  display: none;
+}
+.sub-menu-fixed.sub-menu-fixed.show-mobile{
+  display: block;
+  width: 96%;
+}
+.sub-menu-fixed{
+  left: 0;
+  width: 1em;
+}
+.volver-btn {
+  display: flex;
+}
+
+}
 
