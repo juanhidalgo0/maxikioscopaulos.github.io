@@ -1,0 +1,482 @@
+[
+  {
+    "data-nombre": "HEINEKEN LATA X 473",
+    "nombre": "Heineken Lata x473",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017549/imagenesWeb/heineken_lata_x_473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "GROLSCH CERVEZA EN LATA X 473",
+    "nombre": "Grolsch Lata x473",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017550/imagenesWeb/grolsch_cerveza_en_lata_x_473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "IMPERIAL APA LATA X 473",
+    "nombre": "Imperial APA Lata x473",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017552/imagenesWeb/imperial_apa_lata_x_473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "IMPERIAL GOLDEN LATA X 473",
+    "nombre": "Imperial Golden Lata x473",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017553/imagenesWeb/imperial_golden_lata_x_473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "IMPERIAL IPA LATA X 473",
+    "nombre": "Imperial IPA X473",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017555/imagenesWeb/imperial_ipa_lata_x_473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "IMPERIAL STOUT LATA X 473",
+    "nombre": "Imperial Stout Lata X473",
+    "imagen": "./img/Productos/Bebidas/Cervezas/latas/impNegra.jpg",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "QUILMES LATA  473 CM3",
+    "nombre": "Quilmes Lata X473",
+    "imagen": "./img/Productos/Bebidas/Cervezas/latas/quilmes.jpg",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "QUILMES IPA LATA X 473",
+    "nombre": "Quilmes IPA Lata x473",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017556/imagenesWeb/quilmes_ipa_lata_x_473.jpg",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "QUILMES LATA STOUT X 473",
+    "nombre": "Quilmes Stout Lata x473",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017557/imagenesWeb/quilmes_lata_stout_x_473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "SANTA FE CERVEZA LATA X 473",
+    "nombre": "Santa Fe Lata x473",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017559/imagenesWeb/santa_fe_cerveza_lata_x_473.jpg",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "STELLA ARTOIS LATA X 473",
+    "nombre": "Stella Lata x473",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017560/imagenesWeb/stella_artois_lata_x_473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "ANDES CERVEZA IPA X473",
+    "nombre": "Andes IPA X473",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017562/imagenesWeb/andes_cerveza_ipa_x473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "ANDES ROJA LATA X 473",
+    "nombre": "Andes Roja x473",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017563/imagenesWeb/andes_roja_lata_x_473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "ANDES NEGRA LATA X 473",
+    "nombre": "Andes Negra Lata x473",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017565/imagenesWeb/andes_negra_lata_x_473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "ANDES RUBIA LATA X 473",
+    "nombre": "Andes Rubia Lata x473",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017566/imagenesWeb/andes_rubia_lata_x_473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "361 CERVEZA LATA X 473",
+    "nombre": "361 Lata x473",
+    "imagen": "./img/Productos/Bebidas/Cervezas/latas/361.jpg",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "CORONA LATA X 410",
+    "nombre": "Corona Lata x410",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748018252/qmjqlkiqhvrlnmwpq3g3.jpg",
+    "categoria": "Cerveza",
+    "subcategoria": "Latas",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "BRAHMA LATA PACK X 6",
+    "nombre": "Brahma 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017569/imagenesWeb/brahma_lata_pack_x_6.jpg",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "QUILMES LATA X 473 PACK X 6",
+    "nombre": "Quilmes 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017570/imagenesWeb/quilmes_lata_x_473_pack_x_6.jpg",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "ISENBECK PACK X 6",
+    "nombre": "Isenbeck 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017571/imagenesWeb/isenbeck_pack_x_6.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "BUDWEISER LATA PACK X 6",
+    "nombre": "Budweiser 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017573/imagenesWeb/budweiser_lata_pack_x_6.png",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "STELLA ARTOIS LATA X 473 PACK X 6",
+    "nombre": "Stella 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017574/imagenesWeb/stella_artois_lata_x_473_pack_x_6.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "361 CERVEZA LATA PACK X 6",
+    "nombre": "361 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017576/imagenesWeb/361_cerveza_lata_pack_x_6.png",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "QUILMES LATA NEGRA PACK X 6",
+    "nombre": "Quilmes Stout 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017577/imagenesWeb/quilmes_lata_negra_pack_x_6.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "SANTA FE CERVEZA PACK X 6",
+    "nombre": "Santa Fe 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017580/imagenesWeb/santa_fe_cerveza_pack_x_6.jpg",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "HEINEKEN CERVEZA EN LATA PACK X 6",
+    "nombre": "Heineken 473ml 6x",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017581/imagenesWeb/heineken_cerveza_en_lata_pack_x_6.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "GROLSCH CERVEZA LATA PACK X 6",
+    "nombre": "Grolsch 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017582/imagenesWeb/grolsch_cerveza_lata_pack_x_6.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "ANDES CERVEZA LATA ROJA NEGRA IPA PACK X 6",
+    "nombre": "Andes Rubia 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017566/imagenesWeb/andes_rubia_lata_x_473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "ANDES CERVEZA LATA ROJA NEGRA IPA PACK X 6",
+    "nombre": "Andes Roja 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017563/imagenesWeb/andes_roja_lata_x_473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "ANDES CERVEZA LATA ROJA NEGRA IPA PACK X 6",
+    "nombre": "Andes Ipa 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017562/imagenesWeb/andes_cerveza_ipa_x473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "ANDES CERVEZA LATA ROJA NEGRA IPA PACK X 6",
+    "nombre": "Andes Negra 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017565/imagenesWeb/andes_negra_lata_x_473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "AMSTEL PACK X 6",
+    "nombre": "Amstel 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017588/imagenesWeb/amstel_pack_x_6.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "IMPERIAL LAGER X 473",
+    "nombre": "Imperial Lager 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017589/imagenesWeb/imperial_lager_x_473.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "IMPERIAL GOLDEN LATA PACK X 6",
+    "nombre": "Imperial Golden 473ml x6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017590/imagenesWeb/imperial_golden_lata_pack_x_6.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "IMPERIAL IPA/APA/NEGRA LATA PACK X 6",
+    "nombre": "Imperial IPA 473ml X6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017592/imagenesWeb/imperial_ipa_apa_negra_lata_pack_x_6.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "IMPERIAL IPA/APA/NEGRA LATA PACK X 6",
+    "nombre": "Imperial Roja 473ml X6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748018626/improja_ckxsu6.png",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "IMPERIAL IPA/APA/NEGRA LATA PACK X 6",
+    "nombre": "Imperial APA 473ml X6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748018626/impapa_fe8x1h.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "IMPERIAL IPA/APA/NEGRA LATA PACK X 6",
+    "nombre": "Imperial Cream Stout 473ml X6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748018626/impstout_g41bm5.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "WARSTEINER CERVEZA LATA PACK X 6",
+    "nombre": "Warsteiner 473ml X6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017597/imagenesWeb/warsteiner_cerveza_lata_pack_x_6.jpg",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "SCHNEIDER CERV LATA PACK X 6",
+    "nombre": "Schneider 473ml X6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017598/imagenesWeb/schneider_cerv_lata_pack_x_6.webp",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "CORONA CERVEZA LATA PACK X 6",
+    "nombre": "Corona 410ml X6",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017600/imagenesWeb/corona_cerveza_lata_pack_x_6.jpg",
+    "categoria": "Cerveza",
+    "subcategoria": "Packs",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "PEPSI X 1.5 LT.",
+    "nombre": "Pepsi x1.5 LT.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017601/imagenesWeb/pepsi_x_1.5_lt..jpg",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Pepsi",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "MIRINDA X 2 LT.",
+    "nombre": "Mirinda x 1.5LT.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017603/imagenesWeb/mirinda_x_2_lt..jpg",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Pepsi",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "MANAOS GASEOSA X 2.25 LTS",
+    "nombre": "Manaos Naranja x2.25 LT.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017990/gumwobn3kuntmlmdank6.jpg",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Manaos",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "MANAOS GASEOSA X 2.25 LTS",
+    "nombre": "Manaos Cola x2.25 LT.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017996/clzaxahy8tzq3ftfzqqg.jpg",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Manaos",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "MANAOS GASEOSA X 2.25 LTS",
+    "nombre": "Manaos Lima x2.25 LT.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017990/hrsksbv1wf7yo3eidit1.jpg",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Manaos",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "MANAOS GASEOSA X 2.25 LTS",
+    "nombre": "Manaos Pomelo x2.25 LT.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017990/hqs2e5slexj7sib94e00.jpg",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Manaos",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "MANAOS SODA X 2 LTS",
+    "nombre": "Manaos Soda x2 LT",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017992/hc4z8nrurxwdcazcays0.jpg",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Manaos",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "COCA LATA X 354",
+    "nombre": "Coca Cola Lata x354ml",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017611/imagenesWeb/coca_lata_x_354.webp",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Coca",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "COCA LIGHT X 500",
+    "nombre": "Coca Cola ZERO x 500ml.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017612/imagenesWeb/coca_light_x_500.webp",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Coca",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "COCA COLA X 1 LTS",
+    "nombre": "Coca Cola x 1LT.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017614/imagenesWeb/coca_cola_x_1_lts.webp",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Coca",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "COCA COLA  X 1,5 LTROS.",
+    "nombre": "Coca Cola x 1.5LT.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017615/imagenesWeb/coca_cola__x_1%2C5_ltros..webp",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Coca",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "COCA COLA ZERO X 1,5 LTROS",
+    "nombre": "Coca Cola ZERO x 1.5LT.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017616/imagenesWeb/coca_cola_zero_x_1%2C5_ltros.jpg",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Coca",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "COCA COLA X 2.25",
+    "nombre": "Coca Cola x 2.25LT.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017618/imagenesWeb/coca_cola_x_2.25.webp",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Coca",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "COCA COLA ZERO X 2.25",
+    "nombre": "Coca Cola ZERO x 2.25LT.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017619/imagenesWeb/coca_cola_zero_x_2.25.webp",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Coca",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "COCA COLA X 3",
+    "nombre": "Coca Cola x 3LT.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017620/imagenesWeb/coca_cola_x_3.webp",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Coca",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "FANTA X 500",
+    "nombre": "Fanta x 500ml.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017621/imagenesWeb/fanta_x_500.webp",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Coca",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "FANTA NARANJA X 1,5 LTRO",
+    "nombre": "Fanta x 1.5LT",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017623/imagenesWeb/fanta_naranja_x_1%2C5_ltro.webp",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Coca",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "FANTA X 2.25",
+    "nombre": "Fanta x 2.25LT.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017624/imagenesWeb/fanta_x_2.25.webp",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Coca",
+    "tercer_categoria": ""
+  },
+  {
+    "data-nombre": "FANTA X 3",
+    "nombre": "Fanta x 3LT.",
+    "imagen": "https://res.cloudinary.com/dzegjtthy/image/upload/v1748017625/imagenesWeb/fanta_x_3.webp",
+    "categoria": "Gaseosas",
+    "subcategoria": "Linea Coca",
+    "tercer_categoria": ""
+  }
+]
