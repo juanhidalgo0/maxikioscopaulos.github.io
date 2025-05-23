@@ -160,7 +160,7 @@ body.menu-activo .header {
     justify-content: center;
 
     left: -100%;
-    top: 8.6%;
+    top: 9.7%;
     position: fixed;
 
 
@@ -189,14 +189,14 @@ body.menu-activo .header {
 .menu ul {
   list-style: none;
   margin: 0;
-  padding: 10px;
+  padding: 0;
   text-align: center;
     width: 100%;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 .menu ul li:hover{
-  background-color: rgb(247, 235, 237);
+  background-color: rgb(255, 169, 208);
 }
 .menu.abierto ul{
   opacity:1;
@@ -204,7 +204,9 @@ body.menu-activo .header {
 .menu ul li {
   position: relative; /* Para que el submenu se posicione respecto a este */
   margin: 0;
+  border-bottom: 1px solid #d6d6d6;
 
+  padding: 2%;
 }
 
 
@@ -502,6 +504,43 @@ body.menu-activo .header {
   transform: translateX(5px);
 }
 
+/*ORDENADOR PRODUCTOS*/
+
+.ordenador-productos {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 5%;
+  max-width: 1000px;
+  padding: 0 1rem;
+  font-family: inherit;
+
+}
+
+.ordenador-productos label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.ordenador-productos select {
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ordenador-productos select:hover,
+.ordenador-productos select:focus {
+  border-color: #b67abc;
+  box-shadow: 0 0 0 2px rgba(182, 122, 188, 0.2);
+  outline: none;
+}
 
 
 
@@ -513,14 +552,23 @@ body.menu-activo .header {
 }
 
 .productos {
-
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
 
 }
+.img-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 
+.img-container img {
+  width: 100%;
+  height: 5px;
+  object-fit: cover;
+}
 .productos ul {
   list-style: none;
   padding: 10px;
@@ -742,7 +790,9 @@ body.sidebar-activo .main {
 
 .categoria-cerveza,
 .categoria-gaseosas,
-.categoria-cigarrillos {
+.categoria-cigarrillos,
+.categoria-jugos,
+.categoria-vinos {
   display: contents;
 }
 
@@ -752,7 +802,7 @@ body.sidebar-activo .main {
     justify-content: center;
     left: -100%;
     position: fixed;
-    width: 80%;
+    width: 70%;
     height: 100vh;
     background-color: #ffffff;
     z-index: 1;

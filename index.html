@@ -27,15 +27,15 @@
   <span></span>
   <span></span>
   <span></span>
-</div>
 
 </div>
 
+</div>
 
 <nav class="menu" id="menu">
   <ul>
 
-    <h2>Categorías</h2>
+
 
  <li  class="menu-item menu-item-con-submenu-wrapper">
       <a href="#" class="abrir-submenu" data-submenu="submenu-bebidas" >Bebidas</a>
@@ -46,7 +46,7 @@
             <button href="#" class="ver-todos-btn" onclick="filtrarPorTercerCategoria('Bebidas')">Ver todos</button>
         </div>    
      
-        <li><a href="#" onclick="filtrarCategoria('Cerveza', this)">Cerveza <i class="fa-solid fa-arrow-right flecha-icono""></i></a>
+        <li><a href="#" onclick="filtrarCategoria('Cerveza', this, 'Bebidas')">Cerveza</a></li>
         <li><a href="#" onclick="filtrarCategoria('Gaseosas',  this)">Gaseosas <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
         <li><a href="#" onclick="filtrarCategoria('Jugos', this)">Jugos <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
         <li><a href="#" onclick="filtrarCategoria('Vinos', this)">Vinos <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
@@ -83,50 +83,61 @@
         </div>    
   
         <li><a href="#" onclick="filtrarCategoria('Panadería', this)">Panadería <i class="fa-solid fa-arrow-right flecha-icono""></i></a>    
-        <li><a href="#" onclick="filtrarCategoria('Cerveza', this)">Fideos <i class="fa-solid fa-arrow-right flecha-icono""></i></a>
-        <li><a href="#" onclick="filtrarCategoria('Gaseosas',  this)">Arroz <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
-        <li><a href="#" onclick="filtrarCategoria('Jugos', this)">Embutidos <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
-        <li><a href="#" onclick="filtrarCategoria('Vinos', this)">Hamburguesas <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
-        <li><a href="#" onclick="filtrarCategoria('Vinos', this)">Salchichas <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
-        <li><a href="#" onclick="filtrarCategoria('Vinos', this)">Pizzas <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
-        <li><a href="#" onclick="filtrarCategoria('Vinos', this)">Congelados <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
+        <li><a href="#" onclick="filtrarCategoria('Fideos', this)">Fideos <i class="fa-solid fa-arrow-right flecha-icono""></i></a>
+        <li><a href="#" onclick="filtrarCategoria('Arroz',  this)">Arroz <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
+        <li><a href="#" onclick="filtrarCategoria('Embutidos', this)">Embutidos <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
+        <li><a href="#" onclick="filtrarCategoria('Hamgurguesas', this)">Hamburguesas <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
+        <li><a href="#" onclick="filtrarCategoria('Salchichas', this)">Salchichas <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
+        <li><a href="#" onclick="filtrarCategoria('Pizzas', this)">Pizzas <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
+        <li><a href="#" onclick="filtrarCategoria('Congelados', this)">Congelados <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
+        <li><a href="#" onclick="filtrarCategoria('SinTacc', this)">Sin TACC<i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
       </ul>
  </li>
 
-<li  class="menu-item menu-item-con-submenu-wrapper">
-      <a href="#" class="abrir-submenu" data-submenu="submenu-farmacia" >Farmacia</a>
-      <ul id="submenu-farmacia" class="sub-menu-fixed">
- 
-        <div class="submenu-header">
-            <button class="volver-btn">← Volver</button><h2>Farmacia</h2>
-            <button href="#" class="ver-todos-btn" onclick="filtrarCategoria('todos-farmacia')">Ver Todos</button>
-        </div>    
-   
-        <li><a href="#" onclick="filtrarCategoria('Medicamentos', this)">Medicamentos <i class="fa-solid fa-arrow-right flecha-icono""></i></a>     
-        <li><a href="#" onclick="filtrarCategoria('Higiene', this)">Higiene <i class="fa-solid fa-arrow-right flecha-icono""></i></a>    
-        <li><a href="#" onclick="filtrarCategoria('Preservativos', this)">Preservativos <i class="fa-solid fa-arrow-right flecha-icono""></i></a>                      
-      </ul>
- </li>
 
 <li  class="menu-item menu-item-con-submenu-wrapper">
-      <a href="#" class="abrir-submenu" data-submenu="submenu-limpieza" >Productos de Limpieza</a>
+      <a href="#" class="abrir-submenu" data-submenu="submenu-limpieza" >Higiene y Limpieza</a>
       <ul id="submenu-limpieza" class="sub-menu-fixed">
          <div class="submenu-header">
-            <button class="volver-btn">← Volver</button><h2>Prod. De Limpieza</h2>
+            <button class="volver-btn">← Volver</button><h2>Higiene y Limpieza</h2>
             <button href="#" class="ver-todos-btn" onclick="filtrarCategoria('todos-limpieza')">Ver Todos</button>
         </div>    
  
         <li><a href="#" onclick="filtrarCategoria('Jabón Líquido', this)">Jabón Líquido <i class="fa-solid fa-arrow-right flecha-icono""></i></a>     
         <li><a href="#" onclick="filtrarCategoria('Suavizante', this)">Suavizante <i class="fa-solid fa-arrow-right flecha-icono""></i></a>    
-        <li><a href="#" onclick="filtrarCategoria('Desodorante de Piso', this)">Desodorante de Piso <i class="fa-solid fa-arrow-right flecha-icono""></i></a>                      
+        <li><a href="#" onclick="filtrarCategoria('Desodorante de Piso', this)">Desodorante de Piso <i class="fa-solid fa-arrow-right flecha-icono""></i></a>   
+       <li><a href="#" onclick="filtrarCategoria('Medicamentos', this)">Medicamentos <i class="fa-solid fa-arrow-right flecha-icono""></i></a>     
+        <li><a href="#" onclick="filtrarCategoria('Higiene', this)">Higiene <i class="fa-solid fa-arrow-right flecha-icono""></i></a>    
+        <li><a href="#" onclick="filtrarCategoria('Preservativos', this)">Preservativos <i class="fa-solid fa-arrow-right flecha-icono""></i></a>  
       </ul>
  </li>
 
 <li  class="menu-item menu-item-con-submenu-wrapper">
-      <a href="#" onclick="filtrarCategoria('Cigarrillos', this)" >Cigarrillos</a>
-
+      <a href="#" class="abrir-submenu" data-submenu="submenu-limpieza" >Cigarrillos</a>
+      <ul id="submenu-tabaqueria" class="sub-menu-fixed">
+         <div class="submenu-header">
+            <button class="volver-btn">← Volver</button><h2>Cigarrillos</h2>
+            <button href="#" class="ver-todos-btn" onclick="filtrarCategoria('todos-limpieza')">Ver Todos</button>
+        </div>    
+ 
+        <li><a href="#" onclick="filtrarCategoria('CigarrillosDe10', this)">De 10 <i class="fa-solid fa-arrow-right flecha-icono""></i></a>     
+        <li><a href="#" onclick="filtrarCategoria('CigarrillosDe20', this)">De 20 <i class="fa-solid fa-arrow-right flecha-icono""></i></a>       
+      </ul>
  </li>
 
+<li  class="menu-item menu-item-con-submenu-wrapper">
+      <a href="#" class="abrir-submenu" data-submenu="submenu-limpieza" >Tabaquería</a>
+      <ul id="submenu-tabaqueria" class="sub-menu-fixed">
+         <div class="submenu-header">
+            <button class="volver-btn">← Volver</button><h2>Tabaquería</h2>
+            <button href="#" class="ver-todos-btn" onclick="filtrarCategoria('todos-limpieza')">Ver Todos</button>
+        </div>    
+ 
+        <li><a href="#" onclick="filtrarCategoria('Tabaco', this)">Tabaco <i class="fa-solid fa-arrow-right flecha-icono""></i></a>     
+        <li><a href="#" onclick="filtrarCategoria('Tabaco', this)">Papelillos <i class="fa-solid fa-arrow-right flecha-icono""></i></a>     
+        <li><a href="#" onclick="filtrarCategoria('Tabaco', this)">Filtros <i class="fa-solid fa-arrow-right flecha-icono""></i></a>     
+      </ul>
+ </li>
     <!-- otras categorías --> 
   </ul>
                  
@@ -180,629 +191,22 @@
     <div class="container">
       
 
-
-
-      <div class="productos" id="productos-container">
- 
-
-  <div class="categoria-cerveza">
-
-  <ul class="producto" data-nombre="BRAHMA LATA X473" data-categoria="Cerveza"  data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/brahma.jpg" loading="lazy" alt="Brahma 473"></li>
-          <li><p class="nombre">Brahma Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-
-           <ul class="producto" data-nombre="AMSTEL LATA X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/amstel.jpg" loading="lazy" alt="Amstel x473"></li>
-          <li><p class="nombre">Amstel Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="SCHNEIDER X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/schneider.jpg" loading="lazy" alt="Schneider x473"></li>
-          <li><p class="nombre">Schneider Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="HEINEKEN LATA X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/heineken.jpg" loading="lazy" alt="Heineken x473"></li>
-          <li><p class="nombre">Heineken Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="GROLSCH CERVEZA EN LATA X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/grolsch.jpg" loading="lazy" alt="Grolsch x473"></li>
-          <li><p class="nombre">Grolsch Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="IMPERIAL LAGER X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/impLager.jpg" loading="lazy" alt="Imperial Lager x473"></li>
-          <li><p class="nombre">Imperial Lager Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="IMPERIAL APA LATA X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/impApa.jpg" loading="lazy" alt="Imperial Apa x473"></li>
-          <li><p class="nombre">Imperial APA Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="IMPERIAL GOLDEN LATA X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/impGolden.jpg" loading="lazy" alt="Imperial Golden x473"></li>
-          <li><p class="nombre">Imperial Golden Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="IMPERIAL IPA LATA X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/impIpa.jpg" loading="lazy" alt="Imperial Ipa x473" data-subcategoria="Latas" data-tercer-categoria="Bebidas"></li>
-          <li><p class="nombre">Imperial IPA X473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="IMPERIAL STOUT LATA X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/impNegra.jpg" loading="lazy" alt="Imperial Negra x473"></li>
-          <li><p class="nombre">Imperial Stout Lata X473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="QUILMES LATA  473 CM3" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/quilmes.jpg" loading="lazy" alt="Quilmes x473"></li>
-          <li><p class="nombre">Quilmes Lata X473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="QUILMES IPA LATA X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/quilmesIpa.jpg" loading="lazy" alt="Quilmes Ipa x473"></li>
-          <li><p class="nombre">Quilmes IPA Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="QUILMES LATA STOUT X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/quilmesStout.jpg" loading="lazy" alt="Quilmes Stout x473"></li>
-          <li><p class="nombre">Quilmes Stout Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="SANTA FE CERVEZA LATA X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/santaFe.jpg" loading="lazy" alt="Santa Fe x473"></li>
-          <li><p class="nombre">Santa Fe Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="STELLA ARTOIS LATA X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/stella.jpg" loading="lazy" alt="Stella x473"></li>
-          <li><p class="nombre">Stella Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="ANDES CERVEZA IPA X473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/andesIpa.jpg" loading="lazy" alt="Andes Ipa x473"></li>
-          <li><p class="nombre">Andes IPA X473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="ANDES ROJA LATA X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/andesRoja.jpg" loading="lazy" alt="Andes Roja x473"></li>
-          <li><p class="nombre"></p>Andes Roja Lata x473</li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="ANDES NEGRA LATA X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/andesNegra.jpg" loading="lazy" alt="Andes Negra x473"></li>
-          <li><p class="nombre">Andes Negra Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="ANDES RUBIA LATA X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/andesRubia.jpg" loading="lazy" alt="Andes Rubia x473"></li>
-          <li><p class="nombre">Andes Rubia Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="361 CERVEZA LATA X 473" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/361.jpg" loading="lazy" alt="361 x473"></li>
-          <li><p class="nombre">361 Lata x473</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-           <ul class="producto" data-nombre="CORONA LATA X 410" data-categoria="Cerveza" data-subcategoria="Latas" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/corona.jpg" loading="lazy" alt="Corona x410"></li>
-          <li><p class="nombre">Corona Lata x410</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-        <ul class="producto" data-nombre="BRAHMA LATA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/1.jpg" loading="lazy" alt="Brahma x6"></li>
-          <li><p class="nombre">Brahma 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-        <ul class="producto" data-nombre="QUILMES LATA X 473 PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/quilmesPack.jpg" loading="lazy" alt="Quilmes x6"></li>
-          <li><p class="nombre">Quilmes 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-            <ul class="producto" data-nombre="ISENBECK PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/isenbeck.jpg" loading="lazy" alt="Isenbeck x6"></li>
-          <li><p class="nombre">Isenbeck 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-            <ul class="producto" data-nombre="BUDWEISER LATA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/budweiser.jpg" loading="lazy" alt="Budweiser x6"></li>
-          <li><p class="nombre">Budweiser 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-
-            <ul class="producto" data-nombre="STELLA ARTOIS LATA X 473 PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/stella.jpg" loading="lazy" alt="Stella x6"></li>
-          <li><p class="nombre">Stella 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-            <ul class="producto" data-nombre="361 CERVEZA LATA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/361.png" alt="361 x6"></li>
-          <li><p class="nombre">361 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-            <ul class="producto" data-nombre="QUILMES LATA NEGRA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/quilmesSTOUT.jpg" loading="lazy" alt="Quilmes Stout"></li>
-          <li><p class="nombre">Quilmes Stout 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-            <ul class="producto" data-nombre="SANTA FE CERVEZA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/santafe.jpg" loading="lazy" alt="Santa Fe x6"></li>
-          <li><p class="nombre">Santa Fe 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-            <ul class="producto" data-nombre="HEINEKEN CERVEZA EN LATA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/heineken.jpg" loading="lazy" alt="Heineken x6"></li>
-          <li><p class="nombre">Heineken 473ml 6x</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-            <ul class="producto" data-nombre="GROLSCH CERVEZA LATA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/grolsch.jpg" loading="lazy" alt="Grolsch x6"></li>
-          <li><p class="nombre">Grolsch 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-
-            <ul class="producto" data-nombre="ANDES CERVEZA LATA ROJA NEGRA IPA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/andesRubia.jpg" loading="lazy" alt="Andes Rubia x6"></li>
-          <li><p class="nombre">Andes 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-
-                    <ul class="producto" data-nombre="ANDES CERVEZA LATA ROJA NEGRA IPA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/andesRoja.jpg" loading="lazy" alt="Andes Roja x6"></li>
-          <li><p class="nombre">Andes Roja 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-                    <ul class="producto" data-nombre="ANDES CERVEZA LATA ROJA NEGRA IPA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/andesIpa.jpg" loading="lazy" alt="Andes IPA x6"></li>
-          <li><p class="nombre">Andes Ipa 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-                    <ul class="producto" data-nombre="ANDES CERVEZA LATA ROJA NEGRA IPA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/andesNegra.jpg" loading="lazy" alt="Andes Negra x6"></li>
-          <li><p class="nombre">Andes Negra 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-                           <ul class="producto" data-nombre="AMSTEL PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/amstel.jpg" loading="lazy" alt="Amstel x6"></li>
-          <li><p class="nombre">Amstel 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-                    <ul class="producto" data-nombre="IMPERIAL LAGER X 473" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/implager.jpg" loading="lazy" alt="Imperial Lager x6"></li>
-          <li><p class="nombre">Imperial Lager 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-                    <ul class="producto" data-nombre="IMPERIAL GOLDEN LATA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/impgolden.jpg" loading="lazy" alt="Imperial Golden x6"></li>
-          <li><p class="nombre">Imperial Golden 473ml x6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-                            <ul class="producto" data-nombre="IMPERIAL IPA/APA/NEGRA LATA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/impipa.jpg" loading="lazy" alt="Imperial IPA x6"></li>
-          <li><p class="nombre">Imperial IPA 473ml X6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-                            <ul class="producto" data-nombre="IMPERIAL IPA/APA/NEGRA LATA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/improja.png" alt="Imperial Roja x6"></li>
-          <li><p class="nombre">Imperial Roja 473ml X6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-                                            <ul class="producto" data-nombre="IMPERIAL IPA/APA/NEGRA LATA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/impapa.jpg" loading="lazy" alt="Imperial APA x6"></li>
-          <li><p class="nombre">Imperial APA 473ml X6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-        
-                            <ul class="producto" data-nombre="IMPERIAL IPA/APA/NEGRA LATA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/impstout.jpg" loading="lazy" alt="Imperial Stout x6"></li>
-          <li><p class="nombre">Imperial Negra 473ml X6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-        
-                            <ul class="producto" data-nombre="WARSTEINER CERVEZA LATA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/warsteiner.jpg" loading="lazy" alt="Warsteiner x6"></li>
-          <li><p class="nombre">Warsteiner 473ml X6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-                                    <ul class="producto" data-nombre="SCHNEIDER CERV LATA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/schneider.jpg" loading="lazy" alt="Schneider x6"></li>
-          <li><p class="nombre">Schneider 473ml X6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-
-                                            <ul class="producto" data-nombre="CORONA CERVEZA LATA PACK X 6" data-categoria="Cerveza" data-subcategoria="Packs">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Corona 410ml X6</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>   
-  </div>
-
-  <div class="categoria-gaseosas">
- <!-------------------GASEOSAS------------------>
-
-  <!-------------------LINEA COCA------------------>
-<!--------------------------------------------------------------------------------COCA COLA--------------------------------------------------------------->
-
-                                            <ul class="producto" data-nombre="COCA LATA X 354" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/coca-lata.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Coca Cola Lata x354ml</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                          <ul class="producto" data-nombre="COCA COLA X 500 CM" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/coca500.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Coca Cola x 500ml.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                               <ul class="producto" data-nombre="COCA ZERO X 500" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/coca500zero.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Coca Cola ZERO x 500ml.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                  <ul class="producto" data-nombre="COCA COLA X 1 LTS" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/coca1lt.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Coca Cola x 1LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                  <ul class="producto" data-nombre="COCA COLA  X 1,5 LTROS." data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/coca1-5lt.png" alt="Coca Cola x1 LT."></li>
-          <li><p class="nombre">Coca Cola x 1.5LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                          <ul class="producto" data-nombre="COCA COLA ZERO X 1,5 LTROS" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/coca1-5ltzero.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Coca Cola ZERO x 1.5LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-                                            <ul class="producto" data-nombre="COCA COLA X 2.25" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/coca2-25lt.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Coca Cola x 2.25LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                    <ul class="producto" data-nombre="COCA COLA ZERO X 2.25" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/coca2-25lt-zero.jpg" loading="lazy"  alt="Corona x6"></li>
-          <li><p class="nombre">Coca Cola ZERO x 2.25LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                  <ul class="producto" data-nombre="COCA COLA X 3" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/coca3lt.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Coca Cola x 3LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-<!--------------------------------------------------------------------------------FANTA--------------------------------------------------------------->
-
-                                                         <ul class="producto" data-nombre="FANTA X 500" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/fanta500.jpg" loading="lazy" alt="Fanta x 500ml"></li>
-          <li><p class="nombre">Fanta x 500ml.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-                                          <ul class="producto" data-nombre="FANTA NARANJA X 1,5 LTRO" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/coca1-5lt.png" alt="Fanta x 1.5LT"></li>
-          <li><p class="nombre">Fanta x 1.5LT</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                  <ul class="producto" data-nombre="FANTA X 2.25" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/fanta2-25-lt.jpg" loading="lazy" alt="Fanta x 2.25 LT"></li>
-          <li><p class="nombre">Fanta x 2.25LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                  <ul class="producto" data-nombre="FANTA X 3" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/fanta3lt.jpg" loading="lazy" alt="Fanta x 3 LT"></li>
-          <li><p class="nombre">Fanta x 3LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-   
-
-<!--------------------------------------------------------------------------------SPRITE--------------------------------------------------------------->
-
-                                                         <ul class="producto" data-nombre="SPRITE X 500" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/spritelata.jpg" loading="lazy" alt="Sprite x 500ml"></li>
-          <li><p class="nombre">Sprite x 500ml.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-                                                  <ul class="producto" data-nombre="SPRITE X 1,5 LTR." data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/sprite1-5.jpg" loading="lazy" alt="Sprite x 1.5LT"></li>
-          <li><p class="nombre">Sprite x 1.5LT</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                  <ul class="producto" data-nombre="SPRITE X 2.25" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/sprite2-25.jpg" loading="lazy" alt="Sprite x 2.25 LT"></li>
-          <li><p class="nombre">Sprite x 2.25LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                  <ul class="producto" data-nombre="SPRITE X 3" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Gaseosas/sprite3.jpg" loading="lazy" alt="Sprite x 3LT."></li>
-          <li><p class="nombre">Sprite x 3LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-   
-<!--------------------------------------------------------------------------------SCHWEPPES--------------------------------------------------------------->   
-
-                                                  <ul class="producto" data-nombre="SCHWEPPES POMELO X 500" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Schweppes Pomelo x 500ml"></li>
-          <li><p class="nombre">Schweppes Pomelo x 500ml.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                  <ul class="producto" data-nombre="SCHWEPPES POMELO ZERO X 1.5" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Schweppes Pomelo x 1.5LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                  <ul class="producto" data-nombre="SCHWEPPES POMELO X 2.25" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Schweppes Pomelo x 2.25"></li>
-          <li><p class="nombre">Schweppes x2.25LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                              <ul class="producto" data-nombre="SCHWEPPES TONICA X 2.25" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Schweppes Pomelo x 2.25"></li>
-          <li><p class="nombre">Schweppes Tónica x2.25LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-+
-                                              <ul class="producto" data-nombre="SCHWEPPES TONICA X 1.5" data-categoria="Gaseosas" data-subcategoria="Linea Coca" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Schweppes Pomelo x 1.5"></li>
-          <li><p class="nombre">Schweppes Tónica x1.5LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-
-
-  <!-------------------LINEA PEPSI------------------>
-<!--------------------------------------------------------------------------------PEPSI--------------------------------------------------------------->
-                                            <ul class="producto" data-nombre="Pepsi x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Pepsi" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Pepsi x500 ml.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                            <ul class="producto" data-nombre="Pepsi x 1.5 LT." data-categoria="Gaseosas" data-subcategoria="Linea Pepsi" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Pepsi x1.5 LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                            <ul class="producto" data-nombre="Pepsi x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Pepsi" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Pepsi x2 LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                    <ul class="producto" data-nombre="Pepsi x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Pepsi" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Pepsi x2.25 LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-<!--------------------------------------------------------------------------------MIRINDA--------------------------------------------------------------->
-
-                                                    <ul class="producto" data-nombre="Mirinda x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Pepsi" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Mirinda x 1.5LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                    <ul class="producto" data-nombre="Pepsi x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Pepsi" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Mirinda x 2.25LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-<!--------------------------------------------------------------------------------PASO DE LOS TOROS--------------------------------------------------------------->
-
-                                                    <ul class="producto" data-nombre="Pepsi x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Pepsi" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Paso de los Toros Pomelo x 500ml.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                    <ul class="producto" data-nombre="Pepsi x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Pepsi" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Paso de los Toros Pomelo x 1.5LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                            <ul class="producto" data-nombre="Pepsi x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Pepsi" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Paso de los Toros Pomelo x 2.25LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                            <ul class="producto" data-nombre="Pepsi x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Pepsi" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Paso de los Toros Tónica x 1.5LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                            <ul class="producto" data-nombre="Pepsi x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Pepsi" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Paso de los Toros Tónica x 2.25LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-  <!-------------------LINEA MANAOS------------------>
-
-                                            <ul class="producto" data-nombre="Pepsi x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Manaos" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Manaos Naranja x2.25 LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                            <ul class="producto" data-nombre="Pepsi x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Manaos" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Manaos Cola x2.25 LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                    <ul class="producto" data-nombre="Pepsi x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Manaos" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Manaos Lima x2.25 LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                    <ul class="producto" data-nombre="Pepsi x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Manaos" data-tercer-categoria="Bebidas">
-          <li><img src="/img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Manaos Pomelo x2.25 LT.</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-
-                                                    <ul class="producto" data-nombre="Pepsi x 2 LT." data-categoria="Gaseosas" data-subcategoria="Linea Manaos" data-tercer-categoria="Bebidas">
-          <li><img src="./img/Productos/Bebidas/Cervezas/corona.jpg" loading="lazy" alt="Corona x6"></li>
-          <li><p class="nombre">Manaos Soda x2 LT</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>  
-  </div>
-
-  <div class="categoria-cigarrillos"> 
-          <ul class="producto" data-nombre="Marlboro x10" data-categoria="Cigarrillos">
-          <li><img src="./img/Productos/Bebidas/Cervezas/Latas/brahma.jpg" loading="lazy" alt="Marlboro x10"></li>
-          <li><p class="nombre">Marlboro x10</p></li>
-          <li><p class="precio"></p></li>
-          <li><button onclick="agregarAlCarrito(this)"><span>Agregar</span></button onclick="agregarAlCarrito(this)"></li>
-        </ul>
-        <!-- Aquí se insertan dinámicamente los productos o manualmente como en tu código -->
-  </div>
-
+<div class="ordenador-productos">
+  <label for="ordenar">Ordenar por:</label>
+  <select id="ordenar">
+    <option value="">Seleccionar</option>
+    <option value="precio-asc">Precio: menor a mayor</option>
+    <option value="precio-desc">Precio: mayor a menor</option>
+    <option value="nombre-asc">Nombre: A a Z</option>
+    <option value="nombre-desc">Nombre: Z a A</option>
+  </select>
 </div>
+
+ <div class="productos" id="productos-container">
+        
+
+      </div>
+
       
     </div>
 

@@ -13,22 +13,119 @@ document.addEventListener("DOMContentLoaded", () => {
 
   firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
-  const productosRef = database.ref("/productos");
 
-  productosRef.on("value", (snapshot) => {
-    const productos = snapshot.val();
-    if (!productos) return;
 
-    document.querySelectorAll(".producto").forEach((producto) => {
-      const nombreOriginal = producto.getAttribute("data-nombre");
-      if (!nombreOriginal) return;
+  cargarProductosDesdeFirebase();
 
-      const clave = nombreOriginal.trim().replace(/[.$#[\]/]/g, "_");
-      const precio = productos[clave]?.precio;
-      const precioElemento = producto.querySelector(".precio");
-      if (precioElemento && precio) precioElemento.textContent = `$${precio.toFixed(2)}`;
+
+
+
+function normalizarTexto(texto) {
+  return (texto || "").trim().toUpperCase();
+}
+
+function cargarProductosDesdeFirebase(ordenarPor = "") {
+  const contenedor = document.getElementById("productos-container");
+  contenedor.innerHTML = "";
+
+  const catalogoRef = firebase.database().ref("/catalogo");
+  const preciosRef = firebase.database().ref("/productos");
+
+  Promise.all([catalogoRef.once("value"), preciosRef.once("value")])
+    .then(([catalogoSnap, preciosSnap]) => {
+      const catalogo = catalogoSnap.val();
+      const precios = preciosSnap.val();
+
+      if (!Array.isArray(catalogo)) {
+        console.error("❌ /catalogo no contiene un array.");
+        return;
+      }
+
+      const obtenerPrecio = (dataNombre) => {
+        if (!Array.isArray(precios)) return undefined;
+        const clave = normalizarTexto(dataNombre);
+        const encontrado = precios.find(p => normalizarTexto(p["data-nombre"]) === clave);
+        return encontrado?.precio;
+      };
+
+      // 🔽 ORDENAMIENTO aplicado antes de mostrar
+      if (ordenarPor === "precio-asc" || ordenarPor === "precio-desc") {
+        catalogo.sort((a, b) => {
+          const precioA = obtenerPrecio(a["data-nombre"]) ?? 999999;
+          const precioB = obtenerPrecio(b["data-nombre"]) ?? 999999;
+          return ordenarPor === "precio-asc" ? precioA - precioB : precioB - precioA;
+        });
+      } else if (ordenarPor === "nombre-asc" || ordenarPor === "nombre-desc") {
+        catalogo.sort((a, b) => {
+          const nombreA = (a.nombre || "").toLowerCase();
+          const nombreB = (b.nombre || "").toLowerCase();
+          return ordenarPor === "nombre-asc"
+            ? nombreA.localeCompare(nombreB)
+            : nombreB.localeCompare(nombreA);
+        });
+      }
+
+      // 🔁 Renderizado de productos
+      catalogo.forEach(producto => {
+        const {
+          nombre,
+          ["data-nombre"]: dataNombre,
+          imagen,
+          categoria = "",
+          subcategoria = "",
+          tercer_categoria = ""
+        } = producto;
+
+        const precio = obtenerPrecio(dataNombre);
+
+        const ul = document.createElement("ul");
+        ul.className = "producto";
+        ul.setAttribute("data-nombre", dataNombre);
+        ul.setAttribute("data-categoria", categoria);
+        ul.setAttribute("data-subcategoria", subcategoria);
+        ul.setAttribute("data-tercer-categoria", tercer_categoria);
+
+        ul.innerHTML = `
+          <li><img src="${imagen}" loading="lazy" alt="${nombre}"></li>
+          <li><p class="nombre">${nombre}</p></li>
+          <li><p class="precio">${precio !== undefined ? `$${parseFloat(precio).toFixed(2)}` : "Sin precio"}</p></li>
+          <li><button onclick="agregarAlCarritoDesdeElemento(this)"><span>Agregar</span></button></li>
+        `;
+
+        contenedor.appendChild(ul);
+      });
+    })
+    .catch(error => {
+      console.error("❌ Error cargando catálogo o precios:", error);
     });
-  });
+}
+
+// 🟩 Hacer la función global para que funcione con el selector de orden
+window.cargarProductosDesdeFirebase = cargarProductosDesdeFirebase;
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "kiosco-web.firebaseapp.com",
+    databaseURL: "https://kiosco-web-default-rtdb.firebaseio.com",
+    projectId: "kiosco-web",
+    storageBucket: "kiosco-web.appspot.com",
+    messagingSenderId: "XXXXXXXXXXX",
+    appId: "APP_ID"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  cargarProductosDesdeFirebase();
+});
+
+
+
+
+
+
+
+
 
   const menuToggle = document.getElementById('menuToggle');
   const menu = document.getElementById('menu');
@@ -99,33 +196,9 @@ if (target.matches(".abrir-submenu")) {
 
   });
 
-  let carrito = [];
-  const carritoItems = document.getElementById("carrito-items");
-  const totalCarrito = document.getElementById("total-carrito");
-  const contadorCarrito = document.getElementById("contador-carrito");
-  const pagarBtn = document.getElementById("pagar-btn");
 
-  function actualizarCarrito() {
-    carritoItems.innerHTML = "";
-    let total = 0;
-    carrito.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "item";
-      div.innerHTML = `
-        <img src="${item.imagen}" alt="${item.nombre}">
-        <span>${item.nombre} x${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}</span>
-        <button class="eliminar-unidad" data-nombre="${item.nombre}">❌</button>
-      `;
-      carritoItems.appendChild(div);
-      total += item.precio * item.cantidad;
-    });
-    totalCarrito.textContent = `Total: $${total.toFixed(2)}`;
-    contadorCarrito.textContent = carrito.reduce((acc, item) => acc + item.cantidad, 0);
 
-    document.querySelectorAll(".eliminar-unidad").forEach(btn => {
-      btn.addEventListener("click", () => eliminarUnidad(btn.dataset.nombre));
-    });
-  }
+
 
   function eliminarUnidad(nombre) {
     const index = carrito.findIndex(item => item.nombre === nombre);
@@ -135,33 +208,7 @@ if (target.matches(".abrir-submenu")) {
     }
   }
 
-  function agregarAlCarrito(nombre, precio, imagen, boton) {
-    const existente = carrito.find(item => item.nombre === nombre);
-    existente ? existente.cantidad++ : carrito.push({ nombre, precio, imagen, cantidad: 1 });
-    actualizarCarrito();
-    animarAgregar(boton);
-  }
 
-  function animarAgregar(boton) {
-    const floating = document.createElement("div");
-    floating.className = "floating-plus";
-    floating.textContent = "+1";
-    document.body.appendChild(floating);
-
-    const fromRect = boton.getBoundingClientRect();
-    floating.style.left = `${fromRect.left + fromRect.width / 2}px`;
-    floating.style.top = `${fromRect.top}px`;
-
-    const carritoIcon = abrirCarrito.getBoundingClientRect();
-    const deltaX = carritoIcon.left - fromRect.left;
-    const deltaY = carritoIcon.top - fromRect.top;
-
-    setTimeout(() => {
-      floating.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.5)`;
-      floating.style.opacity = 0;
-      setTimeout(() => floating.remove(), 1000);
-    }, 50);
-  }
 
   document.querySelectorAll(".producto button").forEach(button => {
     button.addEventListener("click", () => {
@@ -349,3 +396,115 @@ function filtrarSoloCategoria(categoria) {
 
   cerrarMenuYOverlay(); // cierra menú, overlay y submenús
 }
+// Variables y funciones globales necesarias
+// Variables globales necesarias
+let carrito = [];
+const carritoItems = document.getElementById("carrito-items");
+const totalCarrito = document.getElementById("total-carrito");
+const contadorCarrito = document.getElementById("contador-carrito");
+const pagarBtn = document.getElementById("pagar-btn");
+
+function actualizarCarrito() {
+  carritoItems.innerHTML = "";
+  let total = 0;
+  carrito.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.innerHTML = `
+      <img src="${item.imagen}" alt="${item.nombre}">
+      <span>${item.nombre} x${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}</span>
+      <button class="eliminar-unidad" data-nombre="${item.nombre}">❌</button>
+    `;
+    carritoItems.appendChild(div);
+    total += item.precio * item.cantidad;
+  });
+
+  totalCarrito.textContent = `Total: $${total.toFixed(2)}`;
+  contadorCarrito.textContent = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+
+  document.querySelectorAll(".eliminar-unidad").forEach(btn => {
+    btn.addEventListener("click", () => eliminarUnidad(btn.dataset.nombre));
+  });
+}
+
+function eliminarUnidad(nombre) {
+  const index = carrito.findIndex(item => item.nombre === nombre);
+  if (index !== -1) {
+    carrito[index].cantidad > 1 ? carrito[index].cantidad-- : carrito.splice(index, 1);
+    actualizarCarrito();
+  }
+}
+
+function agregarAlCarrito(nombre, precio, imagen, boton) {
+  const existente = carrito.find(item => item.nombre === nombre);
+  existente ? existente.cantidad++ : carrito.push({ nombre, precio, imagen, cantidad: 1 });
+  actualizarCarrito();
+  animarAgregar(boton);
+}
+
+function animarAgregar(boton) {
+  const floating = document.createElement("div");
+  floating.className = "floating-plus";
+  floating.textContent = "+1";
+  document.body.appendChild(floating);
+
+  const fromRect = boton.getBoundingClientRect();
+  floating.style.left = `${fromRect.left + fromRect.width / 2}px`;
+  floating.style.top = `${fromRect.top}px`;
+
+  const carritoIcon = document.getElementById("abrir-carrito").getBoundingClientRect();
+  const deltaX = carritoIcon.left - fromRect.left;
+  const deltaY = carritoIcon.top - fromRect.top;
+
+  setTimeout(() => {
+    floating.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.5)`;
+    floating.style.opacity = 0;
+    setTimeout(() => floating.remove(), 1000);
+  }, 50);
+}
+
+// Función usada por botones generados dinámicamente
+window.agregarAlCarritoDesdeElemento = function(boton) {
+  const producto = boton.closest(".producto");
+  const nombre = producto.querySelector(".nombre").textContent;
+  const precioTexto = producto.querySelector(".precio").textContent;
+  const imagen = producto.querySelector("img").src;
+  const precio = parseFloat(precioTexto.replace(/[^0-9.]/g, '')) || 0;
+  agregarAlCarrito(nombre, precio, imagen, boton);
+};
+
+// Botón pagar por WhatsApp
+window.pagarCarrito = function() {
+  if (carrito.length === 0) {
+    alert("El carrito está vacío.");
+    return;
+  }
+
+  let mensaje = "*¡Hola! Quiero hacer este pedido:*\n\n";
+  carrito.forEach(item => {
+    mensaje += `• ${item.nombre} x${item.cantidad} - $${item.precio.toFixed(2)}\n`;
+  });
+
+  const total = carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+  mensaje += `\n*Total: $${total.toFixed(2)}*`;
+  mensaje += `\n\nMi dirección es: ...`;
+
+  window.open(`https://wa.me/+542221440844?text=${encodeURIComponent(mensaje)}`, "_blank");
+};
+
+pagarBtn?.addEventListener("click", () => {
+  window.pagarCarrito();
+});
+
+// Selector de ordenamiento
+document.getElementById("ordenar")?.addEventListener("change", (e) => {
+  const criterio = e.target.value;
+  cargarProductosDesdeFirebase(criterio);
+});
+
+// Hacer pública la función de carga para que se pueda llamar desde eventos
+window.cargarProductosDesdeFirebase = cargarProductosDesdeFirebase;
+document.getElementById("ordenar")?.addEventListener("change", (e) => {
+  const criterio = e.target.value;
+  cargarProductosDesdeFirebase(criterio);
+});
