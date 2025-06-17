@@ -1,3 +1,134 @@
+document.getElementById("cerrarMenu")?.addEventListener("click", () => {
+  document.getElementById("menu").classList.remove("abierto");
+  document.getElementById("overlay")?.classList.remove("active");
+  document.querySelector(".header")?.classList.remove("opaco");
+  document.getElementById("menuToggle")?.classList.remove("activo");
+  cerrarTodosLosSubmenus();
+});
+
+
+
+function cerrarTodosLosSubmenus() {
+  document.querySelectorAll('.sub-menu-fixed').forEach(submenu => {
+
+    submenu.classList.remove('show', 'show-mobile', 'mostrar');
+  });
+}
+function cargarProductosDesdeFirebase(callback) {
+  const contenedor = document.getElementById("productos-container");
+  const loader = document.getElementById("loader2");
+  const pantallaInicio = document.getElementById("pantalla-inicio");
+
+  contenedor.innerHTML = "";
+  loader?.classList.remove("loaderoculto");
+  pantallaInicio?.classList.add("oculto");
+
+  const catalogoRef = firebase.database().ref("/catalogo");
+  const preciosRef = firebase.database().ref("/productos");
+  const stockRef = firebase.database().ref("/stock");
+
+  const modoAdmin = localStorage.getItem("modoAdmin") === "true";
+
+  Promise.all([
+    catalogoRef.once("value"),
+    preciosRef.once("value"),
+    stockRef.once("value")
+  ])
+    .then(([catalogoSnap, preciosSnap, stockSnap]) => {
+      const catalogo = catalogoSnap.val();
+      const precios = preciosSnap.val();
+      const stockData = stockSnap.val() || {};
+
+      if (!Array.isArray(catalogo)) {
+        console.error("❌ /catalogo no contiene un array.");
+        loader?.classList.add("loaderoculto");
+        return;
+      }
+
+      const obtenerPrecio = (dataNombre) => {
+        if (!Array.isArray(precios)) return undefined;
+        const clave = (dataNombre || "").trim().toUpperCase();
+        const encontrado = precios.find(p => (p["data-nombre"] || "").trim().toUpperCase() === clave);
+        return encontrado?.precio;
+      };
+
+      const productosPreparados = [];
+
+      catalogo.forEach(producto => {
+        const {
+          nombre,
+          ["data-nombre"]: dataNombre,
+          imagen,
+          categoria = "",
+          subcategoria = "",
+          tercer_categoria = ""
+        } = producto;
+
+        const precio = obtenerPrecio(dataNombre);
+        const estaEnStock = stockData[dataNombre] !== false;
+
+        const ul = document.createElement("ul");
+        ul.className = "producto visible";
+        ul.setAttribute("data-nombre", dataNombre);
+        ul.setAttribute("data-categoria", categoria);
+        ul.setAttribute("data-subcategoria", subcategoria);
+        ul.setAttribute("data-tercer_categoria", tercer_categoria);
+        ul.setAttribute("data-aos", "fade-up");
+
+        if (!estaEnStock) ul.classList.add("sin-stock");
+
+ul.innerHTML = `
+  <li style="position: relative;">
+    <img src="${imagen}" loading="lazy" alt="${nombre}">
+    ${!estaEnStock ? `<div class="sin-stock-label">SIN STOCK</div>` : ""}
+  </li>
+  <li><p class="nombre" style="text-align: left;">${nombre}</p></li>
+  <li><p class="precio" style="text-align: left;">${precio !== undefined ? `$${parseFloat(precio).toFixed(2)}` : "Sin precio"}</p></li>
+  <li>
+    <button class="agregar" onclick="agregarAlCarritoDesdeElemento(this)" ${!estaEnStock ? "disabled" : ""} style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 10px;">
+      🛒 <span>${!estaEnStock ? "Sin stock" : "Agregar"}</span>
+    </button>
+  </li>
+  ${modoAdmin ? `<li><button onclick="toggleStock(this)">Toggle Stock</button></li>` : ""}
+`;
+
+
+        contenedor.appendChild(ul);
+
+        // Guardamos para uso en inicio
+        productosPreparados.push({
+          nombre,
+          imagen,
+          precio: precio || 0
+        });
+      });
+
+      loader?.classList.add("loaderoculto");
+
+      if (typeof callback === "function") callback();
+
+
+    })
+    .catch(error => {
+      console.error("❌ Error al cargar productos desde Firebase:", error);
+      loader?.classList.add("loaderoculto");
+    });
+setTimeout(() => {
+  const todosLosProductos = Array.from(document.querySelectorAll("#productos-container .producto"));
+
+  if (todosLosProductos.length > 0) {
+    window.productosCargados = true;
+    // Mostrar productos aleatorios sin filtrar
+    mostrarProductosAleatoriosEnInicio(todosLosProductos);
+  }
+}, 500);
+
+
+}
+
+
+
+
 
 /**---SLIDER--- */
 let currentIndex = 0;
@@ -73,6 +204,20 @@ function cerrarSesion() {
 
   // Al cargar la página, verificar si ya está activado el modo admin
 window.onload = function () {
+  // Limpiar última categoría después de X horas (por ejemplo, 1 hora = 3600000 ms)
+const LIMITE_TIEMPO_MS = 60 * 60 * 1000; // 1 hora
+const ultimaVisita = localStorage.getItem("ultimaVisita");
+
+if (ultimaVisita) {
+  const tiempoPasado = Date.now() - parseInt(ultimaVisita, 10);
+  if (tiempoPasado > LIMITE_TIEMPO_MS) {
+    localStorage.removeItem("ultimaCategoria");
+  }
+}
+
+// Guardar la hora actual como última visita
+localStorage.setItem("ultimaVisita", Date.now().toString());
+
   if (localStorage.getItem('modoAdmin') === 'true') {
     activarModoAdmin();
   } else {
@@ -143,144 +288,7 @@ function activarModoAdmin() {
 // Define modoAdmin en tu código global o antes de llamar a la función
 const modoAdmin = false; // Cambiar a false para modo usuario normal
 
-function cargarProductosDesdeFirebase(callback) {
-  const contenedor = document.getElementById("productos-container");
-  contenedor.innerHTML = "";
 
-  const catalogoRef = firebase.database().ref("/catalogo");
-  const preciosRef = firebase.database().ref("/productos");
-  const stockRef = firebase.database().ref("/stock");
-
-  const modoAdmin = localStorage.getItem("modoAdmin") === "true";
-
-  window.toggleStock = function (boton) {
-    const productoEl = boton.closest(".producto");
-    const nombre = productoEl.getAttribute("data-nombre");
-
-    const sinStock = productoEl.classList.toggle("sin-stock");
-
-    let etiqueta = productoEl.querySelector(".sin-stock-label");
-    if (!etiqueta) {
-      etiqueta = document.createElement("div");
-      etiqueta.className = "sin-stock-label";
-      etiqueta.textContent = "SIN STOCK";
-      etiqueta.style = `
-        position: absolute;
-        top: 8px;
-        left: 8px;
-        background: rgba(255,0,0,0.85);
-        color: white;
-        padding: 3px 6px;
-        font-weight: bold;
-        font-size: 0.75rem;
-        border-radius: 4px;
-        pointer-events: none;
-        z-index: 10;
-      `;
-      const liImg = productoEl.querySelector("li:first-child");
-      liImg.style.position = "relative";
-      liImg.appendChild(etiqueta);
-    }
-    etiqueta.style.display = sinStock ? "block" : "none";
-
-    const botonAgregar = productoEl.querySelector("button.agregar span");
-    const botonAgregarBtn = productoEl.querySelector("button.agregar");
-    if (botonAgregar) {
-      botonAgregar.textContent = sinStock ? "Sin stock" : "Agregar";
-      if (botonAgregarBtn) botonAgregarBtn.disabled = sinStock;
-    }
-
-    // ✅ Guardar en Firebase
-    firebase.database().ref("/stock/" + nombre).set(!sinStock);
-  };
-
-  Promise.all([
-    catalogoRef.once("value"),
-    preciosRef.once("value"),
-    stockRef.once("value")
-  ])
-    .then(([catalogoSnap, preciosSnap, stockSnap]) => {
-      const catalogo = catalogoSnap.val();
-      const precios = preciosSnap.val();
-      const stockData = stockSnap.val() || {};
-
-      if (!Array.isArray(catalogo)) {
-        console.error("❌ /catalogo no contiene un array.");
-        return;
-      }
-
-      const obtenerPrecio = (dataNombre) => {
-        if (!Array.isArray(precios)) return undefined;
-        const clave = (dataNombre || "").trim().toUpperCase();
-        const encontrado = precios.find(p => (p["data-nombre"] || "").trim().toUpperCase() === clave);
-        return encontrado?.precio;
-      };
-
-      catalogo.forEach(producto => {
-        const {
-          nombre,
-          ["data-nombre"]: dataNombre,
-          imagen,
-          categoria = "",
-          subcategoria = "",
-          tercer_categoria = ""
-        } = producto;
-
-        const precio = obtenerPrecio(dataNombre);
-        const estaEnStock = stockData[dataNombre] !== false;
-
-        const ul = document.createElement("ul");
-        ul.className = "producto";
-        ul.setAttribute("data-nombre", dataNombre);
-        ul.setAttribute("data-categoria", categoria);
-        ul.setAttribute("data-subcategoria", subcategoria);
-        ul.setAttribute("data-tercer_categoria", tercer_categoria);
-        ul.setAttribute("data-aos", "zoom-in");
-
-        if (!estaEnStock) ul.classList.add("sin-stock");
-
-        ul.innerHTML = `
-          <li style="position: relative;">
-            <img src="${imagen}" loading="lazy" alt="${nombre}">
-            ${!estaEnStock ? `
-              <div class="sin-stock-label" style="
-                position: absolute;
-                top: 8px;
-                left: 8px;
-                background: rgba(255,0,0,0.85);
-                color: white;
-                padding: 3px 6px;
-                font-weight: bold;
-                font-size: 0.75rem;
-                border-radius: 4px;
-                pointer-events: none;
-                z-index: 10;
-              ">SIN STOCK</div>
-            ` : ""}
-          </li>
-          <li><p class="nombre">${nombre}</p></li>
-          <li><p class="precio">${precio !== undefined ? `$${parseFloat(precio).toFixed(2)}` : "Sin precio"}</p></li>
-          <li>
-            <button class="agregar" onclick="agregarAlCarritoDesdeElemento(this)" ${!estaEnStock ? "disabled" : ""}>
-              <span>${!estaEnStock ? "Sin stock" : "Agregar"}</span>
-            </button>
-          </li>
-          ${modoAdmin ? `
-            <li>
-              <button onclick="toggleStock(this)">Toggle Stock</button>
-            </li>` : ""
-          }
-        `;
-
-        contenedor.appendChild(ul);
-      });
-
-      if (typeof callback === "function") callback();
-    })
-    .catch(error => {
-      console.error("❌ Error al cargar productos desde Firebase:", error);
-    });
-}
 
 
 
@@ -347,11 +355,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   firebase.initializeApp(firebaseConfig);
   cargarProductosDesdeFirebase();
+
+  // Botón lupa móvil muestra/oculta barra de búsqueda
+const btnLupa = document.getElementById("boton-lupa");
+const barraBusqueda = document.getElementById("barra-busqueda-movil");
+
+if (btnLupa && barraBusqueda) {
+  console.log("Botón lupa encontrado");
+
+  btnLupa.addEventListener("click", () => {
+    console.log("Lupa clickeada");
+    barraBusqueda.classList.toggle("oculto-en-movil");
+  });
+} else {
+  console.log("No se encontró el botón o la barra");
+}
+
 });
 
 
-
-
+const ultimaCategoria = localStorage.getItem("ultimaCategoria");
+if (ultimaCategoria) {
+  // Espera a que los productos estén cargados antes de filtrar
+  cargarProductosDesdeFirebase(() => {
+    filtrarProductosPorCategoria(ultimaCategoria);
+  });
+}
 
 
 
@@ -365,11 +394,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const cerrarCarrito = document.getElementById('cerrar-carrito');
   const carritoSidebar = document.getElementById('carrito-sidebar');
 
-  function cerrarTodosLosSubmenus() {
-    document.querySelectorAll('.sub-menu-fixed').forEach(submenu => {
-      submenu.classList.remove('show', 'show-mobile', 'mostrar');
-    });
-  }
+
+
+
 
 
 
@@ -403,28 +430,8 @@ document.addEventListener("DOMContentLoaded", () => {
     cerrarTodosLosSubmenus();
   });
 
-document.addEventListener("click", (e) => {
-  const target = e.target;
 
-  if (target.matches(".volver-btn")) {
-  e.preventDefault();
-  console.log("Botón volver clickeado");
-  const submenu = target.closest(".sub-menu-fixed");
-  console.log("Submenú encontrado:", submenu);
-  submenu?.classList.remove("show", "show-mobile", "mostrar");
-  }
 
-if (target.matches(".abrir-submenu")) {
-  e.preventDefault();
-  const submenuId = target.getAttribute("data-submenu");
-  const submenu = document.getElementById(submenuId);
-  if (submenu) {
-    cerrarTodosLosSubmenus();
-    submenu.classList.add("show-mobile"); // <-- Bien
-  }
-}
-
-  });
 
 
 
@@ -510,6 +517,7 @@ if (window.categoriaActiva === categoria) {
     Chocolates: ['Blancos', 'Negro', 'Cajas de Chocolates', 'Bocaditos'],
     Gomitas: ['Acidas/Picantes', 'Comunes'],
     Snacks: ['Papas', 'Palitos', 'Chizitos'],
+    Galletitas: ['Bagley'],
     alimentos: ['Panadería', 'Fideos', 'Arroz', 'Salchichas', 'Hamburguesas', 'Pizzas'],
     Panadería: ['Pan Común', 'Pan de Hamburguesa', 'Pan de Panchos', 'Pan Lactal', 'Grisines/Galletas'],
     farmacia: ['Medicamentos', 'Higiene', 'Preservativos'],
@@ -559,6 +567,70 @@ if (window.categoriaActiva === categoria) {
 
 
 function filtrarProductosPorCategoria(categoriaSeleccionada) {
+const barraCategoria = document.getElementById("barra-categoria");
+const tituloCategoria = document.getElementById("titulo-categoria");
+const botonesContainer = document.getElementById("subcategorias-relacionadas");
+
+tituloCategoria.textContent = categoriaSeleccionada;
+barraCategoria.style.display = "flex";
+
+// 🔁 Mostramos botones de subcategorías relacionadas
+botonesContainer.innerHTML = "";
+
+// Relación de subcategorías
+const subcategoriasPorCategoria = {
+  Cerveza: ['Packs', 'Latas', 'Latones', 'Botellas'],
+  Gaseosas: ['Linea Coca', 'Linea Pepsi', 'Linea Manaos', 'Soda'],
+  Vinos: ['Tinto', 'Blanco'],
+  Jugos: ['En Sobre', 'Agua Saborizada', 'Baggio/Cepita/Ades'],
+  Chocolates: ['Blancos', 'Negro', 'Cajas de Chocolates', 'Bocaditos'],
+  Gomitas: ['Acidas/Picantes', 'Comunes'],
+  Snacks: ['Papas', 'Palitos', 'Chizitos'],
+  Galletitas: ['Bagley'],
+  Panadería: ['Pan Común', 'Pan de Hamburguesa', 'Pan de Panchos', 'Pan Lactal', 'Grisines/Galletas'],
+  Higiene: ['Productos Femeninos', 'Desodoranetes', 'Máquinas de Afeitar', 'Jabones']
+};
+
+// Detectar si la categoría seleccionada es una subcategoría de alguna principal
+for (const [categoriaPrincipal, subcategorias] of Object.entries(subcategoriasPorCategoria)) {
+  // Caso 1: estás viendo una subcategoría (ej: "Latas")
+  if (subcategorias.includes(categoriaSeleccionada)) {
+    subcategorias
+      .filter(sub => sub !== categoriaSeleccionada)
+      .forEach(sub => {
+        const btn = document.createElement("button");
+        btn.textContent = sub;
+        btn.onclick = () => filtrarProductosPorCategoria(sub);
+        botonesContainer.appendChild(btn);
+      });
+
+    const verTodos = document.createElement("button");
+    verTodos.textContent = "Ver todos";
+    verTodos.onclick = () => filtrarProductosPorCategoria(categoriaPrincipal);
+    botonesContainer.appendChild(verTodos);
+    break;
+  }
+
+  // Caso 2: estás viendo la categoría principal (ej: "Cerveza")
+  if (categoriaPrincipal === categoriaSeleccionada) {
+    subcategorias.forEach(sub => {
+      const btn = document.createElement("button");
+      btn.textContent = sub;
+      btn.onclick = () => filtrarProductosPorCategoria(sub);
+      botonesContainer.appendChild(btn);
+    });
+    const verTodos = document.createElement("button");
+verTodos.textContent = "Ver todos";
+verTodos.onclick = () => filtrarProductosPorCategoria(categoriaSeleccionada);
+botonesContainer.appendChild(verTodos);
+
+    break;
+  }
+}
+
+
+
+    localStorage.setItem("ultimaCategoria", categoriaSeleccionada); // ✅ Guarda la categoría
   document.querySelector('.container')?.classList.remove("oculto");
 
   if (!window.productosCargados) {
@@ -598,6 +670,8 @@ function filtrarProductosPorCategoria(categoriaSeleccionada) {
   document.getElementById('overlay')?.classList.remove('active');
 
   document.getElementById("ordenar").value = ""; // Reinicia el selector
+  
+  
 
 }
 
@@ -634,6 +708,12 @@ function cerrarMenuYOverlay() {
 
 
 function filtrarPorTercerCategoria(categoria) {
+  function filtrarPorTercerCategoria(categoria) {
+  localStorage.setItem("ultimaCategoria", categoria); // ✅ Guarda la subcategoría
+
+  // ...resto del código
+}
+
   const categoriaBuscada = categoria.toLowerCase();
 
   if (!window.productosCargados) {
@@ -729,6 +809,11 @@ function agregarAlCarrito(nombre, precio, imagen, boton) {
   animarAgregar(boton);
 }
 
+function vaciarCarrito() {
+  carrito = [];
+  actualizarCarrito();
+}
+
 function animarAgregar(boton) {
   const floating = document.createElement("div");
   floating.className = "floating-plus";
@@ -788,35 +873,50 @@ document.getElementById("ordenar")?.addEventListener("change", (e) => {
   const criterio = e.target.value;
   ordenarProductosVisibles(criterio);
 });
+
+
 function ordenarProductosVisibles(criterio) {
   const contenedor = document.getElementById("productos-container");
-  const productos = Array.from(contenedor.querySelectorAll(".producto"))
-    .filter(prod => prod.style.display !== "none"); // solo visibles
+  const loader = document.getElementById("loader2");
 
-  productos.sort((a, b) => {
-    const nombreA = a.querySelector(".nombre").textContent.toLowerCase();
-    const nombreB = b.querySelector(".nombre").textContent.toLowerCase();
-    const precioA = parseFloat((a.querySelector(".precio")?.textContent || "0").replace(/[^0-9.]/g, '')) || 0;
-    const precioB = parseFloat((b.querySelector(".precio")?.textContent || "0").replace(/[^0-9.]/g, '')) || 0;
+  // Ocultar productos mientras se ordenan
+  contenedor.style.display = "none";
+  loader?.classList.remove("loaderoculto");
 
-    if (criterio === "nombre-asc") return nombreA.localeCompare(nombreB);
-    if (criterio === "nombre-desc") return nombreB.localeCompare(nombreA);
-    if (criterio === "precio-asc") return precioA - precioB;
-    if (criterio === "precio-desc") return precioB - precioA;
+  setTimeout(() => {
+    const productos = Array.from(contenedor.querySelectorAll(".producto"))
+      .filter(prod => prod.style.display !== "none");
 
-    return 0;
-  });
+    productos.sort((a, b) => {
+      const nombreA = a.querySelector(".nombre").textContent.toLowerCase();
+      const nombreB = b.querySelector(".nombre").textContent.toLowerCase();
+      const precioA = parseFloat((a.querySelector(".precio")?.textContent || "0").replace(/[^0-9.]/g, '')) || 0;
+      const precioB = parseFloat((b.querySelector(".precio")?.textContent || "0").replace(/[^0-9.]/g, '')) || 0;
 
-  // Limpiamos y reinsertamos los productos visibles ordenados
-  productos.forEach(prod => contenedor.appendChild(prod));
+      if (criterio === "nombre-asc") return nombreA.localeCompare(nombreB);
+      if (criterio === "nombre-desc") return nombreB.localeCompare(nombreA);
+      if (criterio === "precio-asc") return precioA - precioB;
+      if (criterio === "precio-desc") return precioB - precioA;
+      return 0;
+    });
+
+    productos.forEach(prod => contenedor.appendChild(prod));
+
+    // Mostrar productos y ocultar loader
+    loader?.classList.add("loaderoculto");
+    contenedor.style.display = "grid";
+  }, 300); // podés ajustar este tiempo si lo necesitás
 }
+
+
+
 
 
 // Hacer pública la función de carga para que se pueda llamar desde eventos
 window.cargarProductosDesdeFirebase = cargarProductosDesdeFirebase;
 document.getElementById("ordenar")?.addEventListener("change", (e) => {
   const criterio = e.target.value;
-  cargarProductosDesdeFirebase(criterio);
+
 });
 
 const observer = new IntersectionObserver((entries) => {
@@ -856,6 +956,7 @@ function mostrarSubmenu(categoria, botonClickeado) {
     Chocolates: ['Blancos', 'Negro', 'Cajas de Chocolates', 'Bocaditos'],
     Gomitas: ['Acidas/Picantes', 'Comunes'],
     Snacks: ['Papas', 'Palitos', 'Chizitos'],
+    Galletitas: ['Bagley'],
     alimentos: ['Panadería', 'Fideos', 'Arroz', 'Salchichas', 'Hamburguesas', 'Pizzas'],
     Panadería: ['Pan Común', 'Pan de Hamburguesa', 'Pan de Panchos', 'Pan Lactal', 'Grisines/Galletas'],
     farmacia: ['Medicamentos', 'Higiene', 'Preservativos'],
@@ -924,4 +1025,67 @@ window.toggleStock = function(boton) {
   // Guardar en Firebase
   firebase.database().ref("/stock/" + nombre).set(!sinStock);
 };
+
+//*****PRODUCTOS-INICIO-ALEATORIOS***** */
+function mostrarProductosAleatoriosEnInicio(productos) {
+  const contenedor = document.getElementById("productos-rotativos");
+  if (!contenedor) return;
+
+  const productosArray = Array.from(productos).filter(p => p.offsetParent !== null); // que estén visibles
+  const maxMostrar = 5;
+  const intervalo = 5000;
+
+  function actualizar() {
+    const seleccionados = productosArray
+      .sort(() => Math.random() - 0.5)
+      .slice(0, maxMostrar);
+
+    contenedor.innerHTML = "";
+
+    seleccionados.forEach(prod => {
+      const clon = prod.cloneNode(true);
+      clon.classList.add("visible");
+      contenedor.appendChild(clon);
+    });
+  }
+
+  actualizar();
+  setInterval(actualizar, intervalo);
+}
+ 
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Solo activar en móviles
+  if (window.innerWidth <= 768) {
+    document.querySelectorAll(".abrir-submenu").forEach(link => {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        const submenuId = this.dataset.submenu;
+        const submenu = document.getElementById(submenuId);
+
+        // Ocultar todos los demás submenús
+        document.querySelectorAll(".sub-menu-fixed").forEach(menu => {
+          menu.classList.remove("show-mobile");
+        });
+
+        // Mostrar el submenú correspondiente
+        if (submenu) {
+          submenu.classList.add("show-mobile");
+        }
+      });
+    });
+
+    // Botón "← Volver"
+    document.addEventListener("click", function (e) {
+      if (e.target.classList.contains("volver-btn")) {
+        const submenu = e.target.closest(".sub-menu-fixed");
+        if (submenu) submenu.classList.remove("show-mobile");
+      }
+    });
+  }
+
+  
+});
+
 

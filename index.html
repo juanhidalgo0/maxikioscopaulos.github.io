@@ -20,8 +20,7 @@
   <!-- Pantalla de carga -->
   <div id="loader" class="loader">
     <div class="background-animation"></div>
-      <img src="./img/Logo.png" alt="Logo Maxikiosco Paulos" class="logo" />
-
+    <img src="./img/Logo.png" alt="Logo Maxikiosco Paulos" class="logo" />
 
   </div>
 
@@ -33,31 +32,41 @@
 <div id="overlay"></div>
   <!-- Header principal -->
    
+<div class="header-trasero"></div>
 <header class="header">
 
   <div class="nav">
     <!-- Ícono del menú y menú desplegable juntos -->
     <div class="menu-wrapper">
    <!-- estructura típica -->
-    
+      <img src="./img/Logo.png" alt="Logo Maxikiosco" class="logo-header" />
+  <div class="separador"></div>
 <div class="menu-icon" id="menuToggle">
   <span></span>
   <span></span>
   <span></span>
 </div>
+  <h2 class="texto-categorias">Categorías</h2>
 </div>
 
   <a href="#" class="inicio-header" onclick="mostrarInicio()">Inicio</a>
 
 <nav class="menu" id="menu">
-  
+      <div class="menu-header">
+  <img src="./img/Logo.png" alt="Logo" class="logo-menu" />
+  <span class="menu-titulo">Categorías</span>
+  <button class="cerrar-menu" id="cerrarMenu">×</button>
+</div>
   <ul>
 
 
 
  <li  class="menu-item menu-item-con-submenu-wrapper">
-      <a href="#" class="abrir-submenu" data-submenu="submenu-bebidas" >Bebidas</a>
-      <ul id="submenu-bebidas" class="sub-menu-fixed">
+    <a href="#" class="abrir-submenu" data-submenu="submenu-bebidas" >Bebidas</a>
+
+
+
+    <ul id="submenu-bebidas" class="sub-menu-fixed">
   
         <div class="submenu-header">
             <button class="volver-btn">← Volver</button><h2>Bebidas</h2>
@@ -189,7 +198,9 @@
             <!-- Formulario de login -->
 
 
+            
 </nav>
+
       <div id="submenu-categorias">
         
       </div>
@@ -197,18 +208,26 @@
     </div>
 
     <!-- Contenedor de barra + carrito -->
-    <div class="right-group">
-      
-      <div class="barra-busqueda-productos">
-        <input type="text" id="busqueda-productos" placeholder="Buscar producto...">
-      </div>
-      <div id="carrito-container">
-        <button id="abrir-carrito">
-          <i class="fas fa-shopping-cart"></i>
-          <span id="contador-carrito">0</span>
-        </button>
-      </div>
-    </div>
+<div class="right-group">
+  <!-- Botón lupa solo en móvil -->
+  <button id="boton-lupa" class="solo-movil">
+    <i class="fas fa-search"></i>
+  </button>
+
+  <!-- Campo de búsqueda -->
+  <div class="barra-busqueda-productos oculto-en-movil" id="barra-busqueda-movil">
+    <input type="text" id="busqueda-productos" placeholder="Buscar producto...">
+  </div>
+
+  <!-- Carrito -->
+  <div id="carrito-container">
+    <button id="abrir-carrito">
+      <i class="fas fa-shopping-cart"></i>
+      <span id="contador-carrito">0</span>
+    </button>
+  </div>
+</div>
+
  
         <!-- Sidebar de subcategorías -->
 
@@ -222,6 +241,8 @@
       <span class="cerrar" id="cerrar-carrito">&times;</span>
       <h2>Carrito</h2>
       <div id="carrito-items"></div>
+      <button id="vaciar-carrito" class="boton-vaciar">🗑️ Vaciar carrito</button>
+
       <p id="total-carrito">Total: $0.00</p>
       <button id="pagar-btn">Pagar</button>
     </div>
@@ -253,13 +274,19 @@
 </div>
 
 
-  <div class="contenido-inicio">
-    <h1>Bienvenido a Maxikiosco Paulos</h1>
-  </div>
+ <div class="productos-inicio">
+  <h2 class="titulo-inicio-productos">Nuestros Productos</h2>
+  <div id="productos-rotativos" class="productos productos-grid"></div>
+</div>
+
 </div>
 
     <div class="container oculto">
       
+<div class="barra-categoria" id="barra-categoria" style="display: none;">
+  <h2 id="titulo-categoria" class="titulo-categoria"></h2>
+  <div id="subcategorias-relacionadas" class="subcategorias-relacionadas"></div>
+</div>
 
 <div class="ordenador-productos" id="ordenador-productos">
   <label for="ordenar">Ordenar por:</label>
@@ -271,7 +298,14 @@
     <option value="nombre-desc">Nombre: Z a A</option>
   </select>
 </div>
-<div id="loader2" class="loader2 loaderoculto">Cargando productos...</div>
+
+<div id="loader2" class="loader2 loaderoculto centrado">
+  <img src="./img/Logo.png" alt="Logo Maxikiosco Paulos" class="logo-loader">
+  <p class="texto-loader">Cargando productos...</p>
+</div>
+
+
+
 <div id="contenedor-productos"></div>
 
  <div class="productos" id="productos-container">
