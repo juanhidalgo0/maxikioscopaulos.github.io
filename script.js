@@ -520,7 +520,7 @@ if (window.categoriaActiva === categoria) {
     Chocolates: ['Blancos', 'Negro', 'Cajas de Chocolates', 'Bocaditos'],
     Gomitas: ['Acidas/Picantes', 'Comunes'],
     Snacks: ['Papas', 'Palitos', 'Chizitos'],
-    Galletitas: ['Bagley'],
+    Galletitas: ['Bagley', 'Terrabusi', 'Arcor','Solitas', 'Paseo', 'Okebon', 'Frutigran', 'Don Satur','Cofler'],
     alimentos: ['Panadería', 'Fideos', 'Arroz', 'Salchichas', 'Hamburguesas', 'Pizzas'],
     Panadería: ['Pan Común', 'Pan de Hamburguesa', 'Pan de Panchos', 'Pan Lactal', 'Grisines/Galletas'],
     farmacia: ['Medicamentos', 'Higiene', 'Preservativos'],
