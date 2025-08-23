@@ -700,19 +700,20 @@ body.menu-activo .header {
 
 .sub-menu-fixed {
   position: fixed;
-  top: -.1%; /* debajo del header */
+  top: 0;
   left: 100%;
-  width: 80%; /* igual al ancho del menú */
-  height: calc(100vh - 70px);
+  width: 80%;
+  height: 100vh;
   background: white;
   display: none;
-  z-index: 10000;
   flex-direction: column;
-  padding: 1rem;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  padding: 0 !important;
+  margin: 0 !important;
   overflow-y: auto;
+  z-index: 10000;
   transition: transform 0.3s ease;
 }
+
 
 .sub-menu-fixed li {
   position: relative;
@@ -739,11 +740,16 @@ body.menu-activo .header {
 
 /*SUBMENU-HEADER*/
 .submenu-header {
+  position: sticky;
+  top: 0;
+  background-color: rgb(255, 255, 255);
+  z-index: 10;
+  padding: 1rem;
+  margin: 0 !important;
+  border-bottom: 1px solid #ccc;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1rem; /* Igual que los enlaces */
-  margin-bottom: 0.5rem;
 }
 .submenu-header h2 {
   color: #a91d76;
@@ -1478,7 +1484,7 @@ body.sidebar-activo .main {
   .menu ul {
   list-style: none;
   margin: 0;
-  justify-content: center;
+
   text-align: center;
     width: 100%;
     opacity: 0;
@@ -1498,12 +1504,14 @@ body.sidebar-activo .main {
   display: none;
 }
 .sub-menu-fixed.show-mobile{
-  display: flex;
+  display: flex !important;
   width: 100%;
 }
 .sub-menu-fixed{
   left: 0;
-  width: 100em;
+  width: 100%;
+  top: 0;
+  margin: 0;
 }
 .volver-btn {
   display: flex;
@@ -1541,14 +1549,16 @@ body.sidebar-activo .main {
  .menu{
   top: 0;
  }
-@media (max-width: 768px) {
+
   .volver-btn {
     display: inline-block !important;
   }
 
   .menu-item-con-submenu-wrapper:hover .sub-menu-fixed {
-    display: none !important;
+    display: flex;
   }
+}
+
 
   .sub-menu-fixed.show-mobile {
     display: flex !important;
@@ -1563,6 +1573,3 @@ body.sidebar-activo .main {
     padding: 1rem;
     overflow-y: auto;
   }
-}
-
-}

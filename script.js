@@ -107,21 +107,24 @@ ul.innerHTML = `
 
       if (typeof callback === "function") callback();
 
+window.todosLosProductosParaInicio = Array.from(document.querySelectorAll("#productos-container .producto"));
+mostrarProductosAleatoriosEnInicio(window.todosLosProductosParaInicio);
 
     })
+
     .catch(error => {
       console.error("❌ Error al cargar productos desde Firebase:", error);
       loader?.classList.add("loaderoculto");
-    });
-setTimeout(() => {
-  const todosLosProductos = Array.from(document.querySelectorAll("#productos-container .producto"));
 
-  if (todosLosProductos.length > 0) {
-    window.productosCargados = true;
-    // Mostrar productos aleatorios sin filtrar
-    mostrarProductosAleatoriosEnInicio(todosLosProductos);
-  }
-}, 500);
+       // Guardar todos los productos en una variable global para usarlos en inicio
+    window.todosLosProductosParaInicio = productos;
+
+    // Mostrar en pantalla de inicio (por primera vez)
+    mostrarProductosAleatoriosEnInicio(window.todosLosProductosParaInicio);
+
+    if (callback) callback();
+    });
+
 
 
 }
@@ -1029,19 +1032,17 @@ window.toggleStock = function(boton) {
 //*****PRODUCTOS-INICIO-ALEATORIOS***** */
 function mostrarProductosAleatoriosEnInicio(productos) {
   const contenedor = document.getElementById("productos-rotativos");
-  if (!contenedor) return;
+  if (!contenedor || !productos || productos.length === 0) return;
 
-  const productosArray = Array.from(productos).filter(p => p.offsetParent !== null); // que estén visibles
-  const maxMostrar = 5;
+  const maxMostrar = 4;
   const intervalo = 5000;
 
   function actualizar() {
-    const seleccionados = productosArray
+    const seleccionados = productos
       .sort(() => Math.random() - 0.5)
       .slice(0, maxMostrar);
 
     contenedor.innerHTML = "";
-
     seleccionados.forEach(prod => {
       const clon = prod.cloneNode(true);
       clon.classList.add("visible");
@@ -1052,6 +1053,8 @@ function mostrarProductosAleatoriosEnInicio(productos) {
   actualizar();
   setInterval(actualizar, intervalo);
 }
+
+
  
 
 
@@ -1072,20 +1075,53 @@ document.addEventListener("DOMContentLoaded", function () {
         // Mostrar el submenú correspondiente
         if (submenu) {
           submenu.classList.add("show-mobile");
+
+                // Ocultar menu-header solo en móvil
+      if (window.innerWidth <= 768) {
+        document.getElementById("menuHeader").style.display = "none";
+      }
         }
       });
     });
 
-    // Botón "← Volver"
-    document.addEventListener("click", function (e) {
-      if (e.target.classList.contains("volver-btn")) {
-        const submenu = e.target.closest(".sub-menu-fixed");
-        if (submenu) submenu.classList.remove("show-mobile");
-      }
-    });
+
+
+
   }
 
-  
+  document.querySelectorAll(".abrir-submenu").forEach(item => {
+  item.addEventListener("click", function (e) {
+    e.preventDefault(); // Previene navegación
+
+    // Cerramos otros submenús abiertos
+    document.querySelectorAll(".sub-menu-fixed").forEach(sub => sub.classList.remove("show-mobile"));
+
+    // Abrimos el submenu correspondiente
+    const submenuId = this.dataset.submenu;
+    const submenu = document.getElementById(submenuId);
+
+    if (submenu) {
+      submenu.classList.add("show-mobile");
+
+      // Mostrar botón volver solo en móvil
+      const volverBtn = submenu.querySelector(".volver-btn");
+      if (volverBtn) {
+        volverBtn.style.display = "block";
+        volverBtn.onclick = () => submenu.classList.remove("show-mobile");
+      }
+    }
+  });
+});
+
 });
 
 
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("volver-btn")) {
+    console.log("Botón volver clickeado");
+    const submenu = e.target.closest(".sub-menu-fixed");
+    if (submenu) {
+      submenu.style.display = "none";
+    }
+  }
+});

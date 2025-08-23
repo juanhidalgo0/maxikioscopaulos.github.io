@@ -52,7 +52,7 @@
   <a href="#" class="inicio-header" onclick="mostrarInicio()">Inicio</a>
 
 <nav class="menu" id="menu">
-      <div class="menu-header">
+      <div class="menu-header" id="menuHeader">
   <img src="./img/Logo.png" alt="Logo" class="logo-menu" />
   <span class="menu-titulo">Categorías</span>
   <button class="cerrar-menu" id="cerrarMenu">×</button>
@@ -68,10 +68,10 @@
 
     <ul id="submenu-bebidas" class="sub-menu-fixed">
   
-        <div class="submenu-header">
+        <li class="submenu-header">
             <button class="volver-btn">← Volver</button><h2>Bebidas</h2>
             <button href="#" class="ver-todos-btn" onclick="filtrarPorTercerCategoria('Bebidas')">Ver todos</button>
-        </div>    
+        </li>    
      
         <li><a href="#" onclick="filtrarCategoria('Cerveza', this, 'Bebidas')">Cerveza</a></li>
         <li><a href="#" onclick="filtrarCategoria('Gaseosas',  this)">Gaseosas <i class="fa-solid fa-arrow-right flecha-icono""></i></a></li>
