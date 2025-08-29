@@ -2,15 +2,22 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- antes: content="width=device-width, initial-scale=1.0" -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
   <title>Maxikiosco Paulos</title>
   <link rel="stylesheet" href="./styles.css" />
   <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
+<link rel="preload" as="image" href="./img/banner.jpg">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
   <!-- AOS CSS -->
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
 
 </head>
@@ -59,7 +66,9 @@
 </div>
   <ul>
 
-
+ <li>
+               <button href="#" class="promos-btn" onclick="filtrarPorTercerCategoria('Promos')">PROMOS</button>
+ </li>
 
  <li  class="menu-item menu-item-con-submenu-wrapper">
     <a href="#" class="abrir-submenu" data-submenu="submenu-bebidas" >Bebidas</a>
@@ -167,7 +176,10 @@
  </li>
 
 
-  <button class="footer-btn" onclick="mostrarLogin()"><i class="fa-solid fa-hammer"></i></button>
+  <button id="admin-btn" class="footer-btn" data-admin-trigger onclick="mostrarLogin()">
+  <i class="fa-solid fa-hammer"></i>
+</button>
+
 
     <!-- otras categorías --> 
 
@@ -187,10 +199,7 @@
 <!-- Mensaje de estado -->
 <div id="mensaje"></div>
 
-<!-- Botón de logout (solo se muestra en modo admin) -->
-<div id="logout" style="display: none;">
-  <button onclick="cerrarSesion()">Cerrar sesión</button>
-</div>     
+   
 </div>
   </ul>
 
@@ -218,6 +227,19 @@
   <div class="barra-busqueda-productos oculto-en-movil" id="barra-busqueda-movil">
     <input type="text" id="busqueda-productos" placeholder="Buscar producto...">
   </div>
+  <!-- Botón de logout (solo se muestra en modo admin) -->
+<div id="logout" class="oculto">
+  <p>Modo Admin Activo</p>
+  <button onclick="cerrarSesion()">Cerrar sesión</button>
+</div>  
+<!-- Botón Cuenta -->
+<button id="cuenta-btn" class="cuenta-btn" aria-haspopup="dialog" aria-controls="cuenta-modal" aria-label="Mi cuenta">
+  <!-- Icono inline (sin librerías externas) -->
+  <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 12c2.761 0 5-2.686 5-6s-2.239-6-5-6-5 2.686-5 6 2.239 6 5 6zm0 2c-4.418 0-8 3.134-8 7v1h16v-1c0-3.866-3.582-7-8-7z" fill="currentColor"/>
+  </svg>
+  <span>Cuenta</span>
+</button>
 
   <!-- Carrito -->
   <div id="carrito-container">
@@ -226,6 +248,7 @@
       <span id="contador-carrito">0</span>
     </button>
   </div>
+  <div id="cart-toast" class="cart-toast" aria-live="polite" aria-atomic="true"></div>
 </div>
 
  
@@ -261,16 +284,23 @@
   <div id="pantalla-inicio">
 
 <div class="slider-container">
+
+  
   <div class="slides" id="slides">
     <div class="slide slide1"></div>
     <div class="slide slide2"></div>
     <div class="slide slide3"></div>
   </div>
-  <div class="dots" id="dots">
-    <div class="dot active" onclick="goToSlide(0)"></div>
-    <div class="dot" onclick="goToSlide(1)"></div>
-    <div class="dot" onclick="goToSlide(2)"></div>
-  </div>
+
+
+<!-- Dots accesibles (si aún no los cambiaste a <button>, hacelo) -->
+<div class="dots" id="dots" role="tablist" aria-label="Navegación del slider">
+  <button class="dot active" type="button" role="tab" aria-label="Slide 1" aria-current="true" onclick="goToSlide(0)"></button>
+  <button class="dot"         type="button" role="tab" aria-label="Slide 2" onclick="goToSlide(1)"></button>
+  <button class="dot"         type="button" role="tab" aria-label="Slide 3" onclick="goToSlide(2)"></button>
+</div>
+
+
 </div>
 
 
@@ -324,12 +354,115 @@
     </footer>
  </div>
 </div>
+
+
+<!-- Modal de Cuenta -->
+<div id="cuenta-modal" class="cuenta-modal" aria-hidden="true">
+  <div class="cuenta-dialog" role="dialog" aria-modal="true" aria-labelledby="cuenta-title">
+    <button class="cuenta-close" data-close aria-label="Cerrar">&times;</button>
+    <h2 id="cuenta-title" class="cuenta-title">Mi cuenta</h2>
+
+
+<p id="auth-msg" class="small"></p>
+
+<!-- Mensajes debajo de los formularios -->
+<small id="login-msg" class="msg"></small>
+<small id="reg-msg" class="msg"></small>
+
+
+
+    <!-- Panel autenticado -->
+    <section id="panel-usuario" class="oculto">
+      <p class="small">Sesión iniciada como <strong id="user-email"></strong></p>
+      <p class="small">Puntos: <strong id="user-puntos">0</strong></p>
+      <button id="btn-logout" class="cta">Cerrar sesión</button>
+    </section>
+
+    <!-- Panel login/registro -->
+<div id="panel-auth"> <!-- Login -->
+  <h2>Entrar</h2>
+  <input id="login-email" type="email" placeholder="Correo" />
+  <div class="password-wrapper">
+    <input id="login-pass" type="password" placeholder="Contraseña" />
+      <button type="button" class="toggle-password" onclick="togglePassword('login-pass', this)">
+    <i class="fa-solid fa-eye"></i>
+  </button>
+  </div>
+  <button id="btn-login" class="cta">Entrar</button>
+  <button id="btn-forgot">Olvidé mi contraseña</button>
+
+  <!-- nuevo -->
+  <p class="switch-auth">
+    ¿No tenés cuenta?
+    <button type="button" id="btn-show-register">Crear cuenta</button>
+  </p>
+</div>
+
+<div id="panel-register" class="oculto"> <!-- Registro -->
+  <h2>Crear cuenta</h2>
+  <input id="reg-email" type="email" placeholder="Correo" />
+  <input id="reg-pass" type="password" placeholder="Contraseña" />
+  <input id="reg-tel" type="text" placeholder="Teléfono (opcional)" />
+  <button id="btn-register" class="cta">Registrarme</button>
+
+  <p class="switch-auth">
+    ¿Ya tenés cuenta?
+    <button type="button" id="btn-show-login">Entrar</button>
+  </p>
+</div>
+
+<section id="panel-verify" class="oculto">
+  <h2>Verificá tu correo</h2>
+  <p id="verify-text">
+    Te enviamos un correo para verificar tu cuenta. Revisá tu bandeja y seguí el link para activarla.
+  </p>
+
+  <div class="verify-actions">
+    <button type="button" id="btn-open-gmail" class="linklike">Abrir Gmail</button>
+    <button type="button" id="btn-open-outlook" class="linklike">Abrir Outlook</button>
+  </div>
+
+  <p class="switch-auth">
+    ¿Ya verificaste?
+    <button type="button" id="btn-verify-done">Iniciar sesión</button>
+  </p>
+</section>
+
+  </div>
+</div>
+
+
   <!-- Scripts -->
+
+<!-- Núcleo de Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+<!-- Autenticación -->
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-auth-compat.js"></script>
+<!-- Base de datos en tiempo real -->
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDj6lYh5U-IHquTQSMjC5Ww8rmYKeYpdh4",
+  authDomain: "kiosco-web.firebaseapp.com",
+  databaseURL: "https://kiosco-web-default-rtdb.firebaseio.com",
+  projectId: "kiosco-web",
+  storageBucket: "kiosco-web.firebasestorage.app",
+  messagingSenderId: "328278071313",
+  appId: "1:328278071313:web:25ed6f4e648121cc7039b0",
+  measurementId: "G-546TFPC8MB"
+};
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+</script>
+
+
+
   <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
 
 
 
-    <script src="./script.js"></script>
+    <script src="./script.js" defer></script>
     <!-- AOS JS -->
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>
@@ -341,6 +474,34 @@
   });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
+<!-- Avisos globales -->
+<div id="app-alert" style="display:none; position:fixed; inset:auto 16px 16px 16px; background:#fff; border:1px solid #ccc; border-radius:12px; padding:14px; z-index:99999; box-shadow:0 10px 30px rgba(0,0,0,.15)">
+  <span id="app-alert-text"></span>
+  <button onclick="document.getElementById('app-alert').style.display='none'" style="float:right;border:0;background:#742081;color:#fff;border-radius:10px;padding:6px 10px;margin-left:12px">Cerrar</button>
+</div>
+
 
 </body>
 </html>
