@@ -127,27 +127,47 @@ document.addEventListener('DOMContentLoaded', () => {
     menu?.classList.remove('abierto');
     overlay?.classList.remove('active');
     header?.classList.remove('opaco');
+      header?.classList.remove('menu-open');   // 👈 restaura el icono
     menuToggle?.classList.remove('activo');
     cerrarTodosLosSubmenus();
   });
 
-  if (menuToggle && menu && overlay && header) {
-    menuToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const abierto = menu.classList.toggle('abierto');
-      overlay.classList.toggle('active', abierto);
-      menuToggle.classList.toggle('activo', abierto);
-      header.classList.toggle('opaco', abierto);
-    });
-    overlay.addEventListener('click', () => {
-      menu.classList.remove('abierto');
-      carritoSidebar?.classList.remove('active');
-      overlay.classList.remove('active');
-      header.classList.remove('opaco');
-      menuToggle.classList.remove('activo');
-      cerrarTodosLosSubmenus();
-    });
-  }
+// Debounce para evitar que el primer click cierre inmediatamente
+let overlayJustOpened = false;
+
+if (menuToggle && menu && overlay && header) {
+  menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const abierto = menu.classList.toggle('abierto');
+
+    
+
+    // Activo overlay *después* y con debounce
+    if (abierto) {
+      overlayJustOpened = true;
+      setTimeout(()=> overlayJustOpened = false, 180);
+    }
+    overlay.classList.toggle('active', abierto);
+    menuToggle.classList.toggle('activo', abierto);
+    header.classList.toggle('opaco', abierto);
+    header.classList.toggle('menu-open', abierto);
+  });
+
+  overlay.addEventListener('click', () => {
+      // si hay submenús activos, no cerrar nada todavía
+  const activo = document.querySelector('.sub-menu-fixed.mostrar');
+  if (activo) return;
+    if (overlayJustOpened) return; // ignora el click sintético inmediato
+    menu.classList.remove('abierto');
+    carritoSidebar?.classList.remove('active');
+    overlay.classList.remove('active');
+    header.classList.remove('opaco');
+    header.classList.remove('menu-open');
+    menuToggle.classList.remove('activo');
+    cerrarTodosLosSubmenus();
+  });
+}
+
 
   if (abrirCarrito && cerrarCarrito && carritoSidebar) {
     abrirCarrito.addEventListener('click', (e) => {
@@ -552,6 +572,7 @@ if (localStorage.getItem('modoAdmin') === 'true') {
 /* ---------- Hooks para que el login SIEMPRE funcione ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   
+  
   // 1) Si tu login está dentro de un <form>, evitá el submit y llamá a verificarAdmin()
   const form = document.querySelector('#login form') || document.getElementById('login-form');
   if (form && !form._adminBound) {
@@ -600,52 +621,235 @@ window.mostrarLogin = function () {
 
 
   /* ---------------- Búsqueda y lupa móvil ---------------- */
-  const inputBusqueda = $('busqueda-productos');
-  inputBusqueda?.addEventListener('input', () => {
-    const valor = inputBusqueda.value.toLowerCase();
-    document.querySelectorAll('.producto').forEach(prod => {
-      const nombre = prod.querySelector('.nombre')?.textContent.toLowerCase() || '';
-      prod.style.display = nombre.includes(valor) ? 'flex' : 'none';
-    });
+const inputBusqueda = $('busqueda-productos');
+inputBusqueda?.addEventListener('input', () => {
+  const valor = inputBusqueda.value.toLowerCase();
+  const productos = document.querySelectorAll('.producto');
+  const pantallaInicio = $('pantalla-inicio');
+  const contenedorProductos = $('productos-container');
+  const containerPrincipal = document.querySelector('.container');
+  const ordenadorProductos = $('ordenador-productos');
+  const barraCategorias = document.querySelectorAll('.barra-categoria, .titulo-categoria');
+
+  let hayCoincidencias = false;
+
+  // 🔹 Buscar coincidencias
+  productos.forEach(prod => {
+    const nombre = prod.querySelector('.nombre')?.textContent.toLowerCase() || '';
+    const coincide = nombre.includes(valor);
+    prod.style.display = coincide ? 'flex' : 'none';
+    if (coincide) hayCoincidencias = true;
   });
+
+  // 🔹 Crear o buscar mensaje de "sin resultados"
+  let mensajeNoResultados = document.getElementById('mensaje-no-resultados');
+  if (!mensajeNoResultados) {
+    mensajeNoResultados = document.createElement('p');
+    mensajeNoResultados.id = 'mensaje-no-resultados';
+    mensajeNoResultados.textContent = 'No se encontraron productos.';
+    mensajeNoResultados.style.textAlign = 'center';
+    mensajeNoResultados.style.fontSize = '1.2rem';
+    mensajeNoResultados.style.marginTop = '2rem';
+    mensajeNoResultados.style.color = '#742081';
+    contenedorProductos?.appendChild(mensajeNoResultados);
+  }
+
+  // 🔹 Lógica principal
+  if (valor.trim() !== '') {
+    // Ocultar inicio y mostrar productos
+    pantallaInicio?.classList.add('oculto');
+    containerPrincipal?.classList.remove('oculto');
+    if (contenedorProductos) contenedorProductos.style.display = 'grid';
+    if (ordenadorProductos) ordenadorProductos.style.display = 'flex';
+
+    // Ocultar carteles de categorías
+    barraCategorias.forEach(el => el.style.display = 'none');
+
+    // Mostrar u ocultar mensaje según resultados
+    if (hayCoincidencias) {
+      mensajeNoResultados.style.display = 'none';
+    } else {
+      mensajeNoResultados.style.display = 'block';
+    }
+
+  } else {
+    // Si se borra la búsqueda, volver al inicio
+    pantallaInicio?.classList.remove('oculto');
+    containerPrincipal?.classList.add('oculto');
+    if (contenedorProductos) contenedorProductos.style.display = 'none';
+    if (ordenadorProductos) ordenadorProductos.style.display = 'none';
+    barraCategorias.forEach(el => el.style.display = '');
+    mensajeNoResultados.style.display = 'none';
+  }
+});
+
+
+
   const btnLupa = $('boton-lupa');
   const barraBusqueda = $('barra-busqueda-movil');
   if (btnLupa && barraBusqueda) btnLupa.addEventListener('click', ()=> barraBusqueda.classList.toggle('oculto-en-movil'));
 
   /* ---------------- Inicio / categorías ---------------- */
-  window.mostrarInicio = function(){ $('pantalla-inicio')?.classList.remove('oculto'); $('productos-container')&&($('productos-container').style.display='none'); $('ordenador-productos')&&($('ordenador-productos').style.display='none'); document.querySelector('.container')?.classList.add('oculto'); document.querySelector('.menu')?.classList.remove('oculto'); overlay?.classList.remove('active'); };
+  window.mostrarInicio = function(){ 
+    $('pantalla-inicio')?.classList.remove('oculto'); 
+    $('productos-container')&&($('productos-container').style.display='none');
+     $('ordenador-productos')&&($('ordenador-productos').style.display='none');
+      document.querySelector('.container')?.classList.add('oculto'); 
+      document.querySelector('.menu')?.classList.remove('oculto'); 
+      overlay?.classList.remove('active'); 
+    cerrarMenuYOverlay();
+      resetearBusquedaYCategoria();
+};
 
-  function cerrarMenuYOverlay(){ menu?.classList.remove('abierto'); overlay?.classList.remove('active'); header?.classList.remove('opaco'); menuToggle?.classList.remove('activo'); cerrarTodosLosSubmenus(); const sub = $('submenu-categorias'); if(sub){ sub.classList.remove('show','animar'); sub.innerHTML=''; } }
+function cerrarMenuYOverlay() {
+  const menu = document.getElementById('menu');
+  const overlay = document.getElementById('overlay');
+  const header = document.querySelector('.header');
+  const menuToggle = document.getElementById('menuToggle');
+  const productos = document.getElementById('productos-container');
+  const menuHeader = document.getElementById('menuHeader');
 
-  window.filtrarCategoria = function(categoria, botonClickeado=null){
-    // Subcategorías
-    const map = {
-      bebidas:['Cerveza','Gaseosas','Jugos','Vinos'],
-      Cerveza:['Packs','Latas','Latones','Botellas'],
-      Gaseosas:['Linea Coca','Linea Pepsi','Linea Manaos','Soda'],
-      Vinos:['Tinto','Blanco'],
-      Jugos:['En Sobre','Agua Saborizada','Baggio/Cepita/Ades'],
-      Golosinas:['Chocolates','Gomitas','Caramelos','Galletitas','Snacks'],
-      Chocolates:['Blancos','Negro','Cajas de Chocolates','Bocaditos'],
-      Gomitas:['Acidas/Picantes','Comunes'],
-      Snacks:['Papas','Palitos','Chizitos'],
-      Galletitas:['Bagley','Terrabusi','Arcor','Solitas','Paseo','Okebon','Frutigran','Don Satur','Cofler'],
-      alimentos:['Panadería','Fideos','Arroz','Salchichas','Hamburguesas','Pizzas'],
-      Panadería:['Pan Común','Pan de Hamburguesa','Pan de Panchos','Pan Lactal','Grisines/Galletas'],
-      farmacia:['Medicamentos','Higiene','Preservativos'],
-      Higiene:['Productos Femeninos','Desodoranetes','Máquinas de Afeitar','Jabones']
-    };
+  if (!menu || !overlay || !header || !menuToggle) return;
 
-    const submenu = $('submenu-categorias');
-    if (map[categoria]?.length) {
-      submenu.innerHTML=''; submenu.classList.add('show','animar');
-      const btnTodos = document.createElement('button'); btnTodos.textContent='Ver todos'; btnTodos.onclick=()=>{ filtrarProductosPorCategoria(categoria); cerrarMenuYOverlay(); }; submenu.appendChild(btnTodos);
-      map[categoria].forEach(sub=>{ const b=document.createElement('button'); b.textContent=sub; b.onclick=()=>{ filtrarProductosPorCategoria(sub); cerrarMenuYOverlay(); }; submenu.appendChild(b); });
-      if (botonClickeado) { const li = botonClickeado.closest('li'); if (li) li.insertAdjacentElement('afterend', submenu); }
-      window.categoriaActiva = categoria; return;
-    }
-    filtrarProductosPorCategoria(categoria); cerrarMenuYOverlay();
+  // Cierra menú y quita cualquier estado
+  menu.classList.remove('abierto', 'submenu-open');
+  menu.removeAttribute('style');
+
+  // Cierra TODOS los submenús
+  document.querySelectorAll('.sub-menu-fixed').forEach(submenu => {
+    submenu.classList.remove('mostrar', 'show', 'show-mobile');
+    submenu.style.display = 'none';
+  });
+
+  // (Opcional) resetea flechas si usás último icono guardado
+  if (window.ultimoIconoFlechaAbierto) {
+    window.ultimoIconoFlechaAbierto.classList.remove('fa-chevron-down');
+    window.ultimoIconoFlechaAbierto.classList.add('fa-arrow-right');
+    window.ultimoIconoFlechaAbierto = null;
+  }
+
+  // Limpia header y botón
+  header.classList.remove('opaco', 'menu-open');
+  menuToggle.classList.remove('activo');
+
+  // Desactiva overlay y limpia inline
+  overlay.classList.remove('active');
+  overlay.style.opacity = '0';
+  overlay.style.pointerEvents = 'none';
+  setTimeout(() => overlay.removeAttribute('style'), 300);
+
+  // Asegura que el contenedor de productos NO tape el menú
+  if (productos) productos.style.zIndex = '1';
+
+  // Restituye header del menú (logo + título) si lo ocultás en submenús
+  if (menuHeader) {
+    menuHeader.style.display = 'flex';
+    menuHeader.style.opacity = '1';
+    menuHeader.style.visibility = 'visible';
+  }
+
+  document.body.classList.remove('no-scroll');
+  document.documentElement.classList.remove('no-scroll');
+}
+window.cerrarMenuYOverlay = cerrarMenuYOverlay;
+
+
+
+
+// Guarda esta variable en el scope donde están tus handlers del menú:
+let ultimoIconoFlechaAbierto = null;
+
+window.filtrarCategoria = function(categoria, botonClickeado=null){
+  // --- mapa de subcategorías (dejá el tuyo como está) ---
+  const map = {
+    bebidas:['Cerveza','Gaseosas','Jugos','Vinos'],
+    Cerveza:['Packs','Latas','Latones','Botellas'],
+    Gaseosas:['Linea Coca','Linea Pepsi','Linea Manaos','Soda'],
+    Vinos:['Tinto','Blanco'],
+    Jugos:['En Sobre','Agua Saborizada','Baggio/Cepita/Ades'],
+    Golosinas:['Chocolates','Gomitas','Caramelos','Galletitas','Snacks'],
+    Chocolates:['Blancos','Negro','Cajas de Chocolates','Bocaditos'],
+    Gomitas:['Acidas/Picantes','Comunes'],
+    Snacks:['Papas','Palitos','Chizitos'],
+    Galletitas:['Bagley','Terrabusi','Arcor','Solitas','Paseo','Okebon','Frutigran','Don Satur','Cofler'],
+    alimentos:['Panadería','Fideos','Arroz','Salchichas','Hamburguesas','Pizzas'],
+    Panadería:['Pan Común','Pan de Hamburguesa','Pan de Panchos','Pan Lactal','Grisines/Galletas'],
+    farmacia:['Medicamentos','Higiene','Preservativos'],
+    Higiene:['Productos Femeninos','Desodoranetes','Máquinas de Afeitar','Jabones']
   };
+
+  const submenu = $('submenu-categorias'); // ya existe en tu HTML/CSS
+  const tieneSub = !!map[categoria]?.length;
+
+  // --- TOGGLE: si clickeás la misma categoría abierta, cerrar ---
+  const mismaCategoria = (window.categoriaActiva === categoria) && submenu?.classList.contains('show');
+  if (mismaCategoria){
+    // cerrar visualmente
+    submenu.classList.remove('show','animar');
+    submenu.innerHTML = '';
+    window.categoriaActiva = null;
+
+    // resetear flecha del botón anterior
+    if (ultimoIconoFlechaAbierto){
+      ultimoIconoFlechaAbierto.classList.remove('fa-chevron-down');
+      ultimoIconoFlechaAbierto.classList.add('fa-arrow-right');
+      ultimoIconoFlechaAbierto = null;
+    }
+    return; // <-- importante
+  }
+
+  // Si NO hay subcategorías definidas, filtrar directo como antes
+  if (!tieneSub){
+    filtrarProductosPorCategoria(categoria);
+    cerrarMenuYOverlay();
+      resetearBusquedaYCategoria(); // ya existe en tu código
+    return;
+  }
+
+  // --- Abrir y renderizar submenú como ya hacías ---
+  submenu.innerHTML = '';
+  submenu.classList.add('show','animar');
+
+  // Botón "Ver todos"
+  const btnTodos = document.createElement('button');
+  btnTodos.textContent = 'Ver todos';
+  btnTodos.onclick = () => { filtrarProductosPorCategoria(categoria); cerrarMenuYOverlay(); };
+  submenu.appendChild(btnTodos);
+
+  // Botones de subcategorías
+  map[categoria].forEach(sub => {
+    const b = document.createElement('button');
+    b.textContent = sub;
+    b.onclick = () => { filtrarProductosPorCategoria(sub); cerrarMenuYOverlay(); };
+    submenu.appendChild(b);
+  });
+
+  // Insertar el bloque debajo del <li> de la categoría clickeada (si lo pasaste como "this")
+  if (botonClickeado){
+    const li = botonClickeado.closest('li');
+    if (li) li.insertAdjacentElement('afterend', submenu);
+
+    // --- Manejo de flecha: cambiar → por ↓ en el item abierto ---
+    // 1) resetear cualquier flecha↓ previa
+    document.querySelectorAll('.flecha-icono.fa-chevron-down')
+      .forEach(i => { i.classList.remove('fa-chevron-down'); i.classList.add('fa-arrow-right'); });
+
+    // 2) conseguir/crear la flecha del botón actual
+    let icon = botonClickeado.querySelector('.flecha-icono');
+    if (!icon){
+      icon = document.createElement('i');
+      icon.className = 'fa-solid fa-arrow-right flecha-icono';
+      botonClickeado.appendChild(icon);
+    }
+    // 3) ponerla como “abierto” (flecha hacia abajo)
+    icon.classList.remove('fa-arrow-right');
+    icon.classList.add('fa-chevron-down');
+    ultimoIconoFlechaAbierto = icon;
+  }
+
+  window.categoriaActiva = categoria; // marcar activa
+};
+
 
   window.filtrarProductosPorCategoria = function(categoriaSeleccionada){
     const barraCategoria = $('barra-categoria');
@@ -729,37 +933,120 @@ window.mostrarLogin = function () {
       document.querySelectorAll('.producto').forEach(p=>{ const cat=p.getAttribute('data-categoria'); p.style.display = (cat===categoria)?'flex':'none'; });
       cerrarMenuYOverlay();
     });
+    
+    cerrarMenuYOverlay();
+
   };
 
   /* ---------------- Carrito ---------------- */
   let carrito = [];
+
+  
   const carritoItems = $('carrito-items');
   const totalCarrito = $('total-carrito');
   const contadorCarrito = $('contador-carrito');
   const pagarBtn = $('pagar-btn');
 
-  function actualizarCarrito(){
-    if (!carritoItems || !totalCarrito || !contadorCarrito) return;
-    carritoItems.innerHTML='';
-    let total=0;
-    carrito.forEach(item=>{
-      const div=document.createElement('div');
-      div.className='item';
-      div.innerHTML=`<img src="${item.imagen}" alt="${item.nombre}"><span>${item.nombre} x${item.cantidad} - $${(item.precio*item.cantidad).toFixed(2)}</span><button class="eliminar-unidad" data-nombre="${item.nombre}">❌</button>`;
-      carritoItems.appendChild(div);
-      total += item.precio * item.cantidad;
-    });
-    totalCarrito.textContent = `Total: $${total.toFixed(2)}`;
-    contadorCarrito.textContent = carrito.reduce((acc,it)=>acc+it.cantidad,0);
-    carritoItems.querySelectorAll('.eliminar-unidad').forEach(btn=> btn.addEventListener('click', ()=> eliminarUnidad(btn.dataset.nombre)) );
+function actualizarCarrito(){
+  if (!carritoItems || !totalCarrito || !contadorCarrito) return;
+  carritoItems.innerHTML='';
+  let total=0;
+  carrito.forEach(item=>{
+    const div=document.createElement('div');
+    div.className='item';
+    div.innerHTML=`<img src="${item.imagen}" alt="${item.nombre}">
+      <span>${item.nombre} x${item.cantidad} - $${(item.precio*item.cantidad).toFixed(2)}</span>
+      <button class="eliminar-unidad" data-nombre="${item.nombre}">❌</button>`;
+    carritoItems.appendChild(div);
+    total += item.precio * item.cantidad;
+  });
+  totalCarrito.textContent = `Total: $${total.toFixed(2)}`;
+  contadorCarrito.textContent = carrito.reduce((acc,it)=>acc+it.cantidad,0);
+  carritoItems.querySelectorAll('.eliminar-unidad')
+    .forEach(btn=> btn.addEventListener('click', ()=> eliminarUnidad(btn.dataset.nombre)) );
+
+  // ✅ Persistir estado
+  try { localStorage.setItem('carrito', JSON.stringify(carrito)); } catch {}
+}
+
+// Cargar carrito desde localStorage (con validación y sin romper el script)
+(function cargarCarritoDeLocalStorageSegura(){
+  try {
+    const raw = localStorage.getItem('carrito');
+    if (!raw) return;                           // nada guardado
+    const data = JSON.parse(raw);
+    if (!Array.isArray(data)) return;           // formato inesperado
+
+    // Sanitizar: solo objetos válidos
+    const limpio = data
+      .filter(it => it && typeof it.nombre==='string'
+                        && typeof it.precio==='number'
+                        && typeof it.cantidad==='number'
+                        && it.cantidad > 0)
+      .map(it => ({
+        nombre: it.nombre,
+        precio: it.precio,
+        imagen: it.imagen || '',
+        cantidad: it.cantidad
+      }));
+
+    if (limpio.length) {
+      carrito = limpio;
+      actualizarCarrito();                      // pinta UI con refs ya definidas
+    }
+  } catch (e) {
+    console.warn('Carrito corrupto en localStorage; se limpia.', e);
+    localStorage.removeItem('carrito');
   }
+})();
+
+  
+  
   function eliminarUnidad(nombre){ const i=carrito.findIndex(it=>it.nombre===nombre); if(i!==-1){ carrito[i].cantidad>1?carrito[i].cantidad--:carrito.splice(i,1); actualizarCarrito(); } }
   function agregarAlCarrito(nombre, precio, imagen, boton){ const ex=carrito.find(it=>it.nombre===nombre); ex?ex.cantidad++:carrito.push({nombre,precio,imagen,cantidad:1}); actualizarCarrito(); animarAgregar(boton); }
-  function vaciarCarrito(){ carrito=[]; actualizarCarrito(); }
+  function vaciarCarrito(){
+  carrito = [];
+  try { localStorage.removeItem('carrito'); } catch {}
+  actualizarCarrito();
+}
+
+const btnVaciar = document.getElementById('vaciar-carrito');
+
+if (btnVaciar) {
+  btnVaciar.addEventListener('click', () => {
+    const overlay = document.createElement('div');
+    overlay.className = 'confirm-overlay';
+    overlay.innerHTML = `
+      <div class="confirm-box">
+        <p>¿Vaciar el carrito?</p>
+        <button id="cancelar">Cancelar</button>
+        <button id="aceptar">Vaciar</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('#cancelar').onclick = () => overlay.remove();
+    overlay.querySelector('#aceptar').onclick = () => {
+      vaciarCarrito();   // 👈 aquí se llama a la función original
+      overlay.remove();
+    };
+  });
+}
+
+
+
+
   function animarAgregar(boton){ const floating=document.createElement('div'); floating.className='floating-plus'; floating.textContent='+1'; document.body.appendChild(floating); const from=boton.getBoundingClientRect(); floating.style.left=`${from.left + from.width/2}px`; floating.style.top=`${from.top}px`; const cRect=$('abrir-carrito').getBoundingClientRect(); const dx=cRect.left - from.left; const dy=cRect.top - from.top; setTimeout(()=>{ floating.style.transform=`translate(${dx}px, ${dy}px) scale(0.5)`; floating.style.opacity=0; setTimeout(()=>floating.remove(),1000); },50); }
 
   window.agregarAlCarritoDesdeElemento = function(boton){ const prod=boton.closest('.producto'); const nombre=prod.querySelector('.nombre')?.textContent||''; const precioTexto=prod.querySelector('.precio')?.textContent||'0'; const imagen=prod.querySelector('img')?.src||''; const precio=parseFloat(precioTexto.replace(/[^0-9.]/g,''))||0; agregarAlCarrito(nombre, precio, imagen, boton); };
-  window.pagarCarrito = function(){ if (carrito.length===0) return alert('El carrito está vacío.'); let msj='*¡Hola! Quiero hacer este pedido:*\n\n'; carrito.forEach(it=> msj+=`• ${it.nombre} x${it.cantidad} - $${it.precio.toFixed(2)}\n`); const total=carrito.reduce((a,it)=>a+it.precio*it.cantidad,0); msj+=`\n*Total: $${total.toFixed(2)}*\n\nMi dirección es: ...`; window.open(`https://wa.me/+542221440844?text=${encodeURIComponent(msj)}`,'_blank'); };
+  
+  window.pagarCarrito = function(){ 
+    if (carrito.length===0) return alert('El carrito está vacío.'); 
+    let msj='*¡Hola! Quiero hacer este pedido:*\n\n'; carrito.forEach(it=> msj+=`• ${it.nombre} x${it.cantidad} - $${it.precio.toFixed(2)}\n` + "c/u"); 
+    const total=carrito.reduce((a,it)=>a+it.precio*it.cantidad,0); 
+    msj+=`\n*Total: $${total.toFixed(2)}*\n\nMi dirección es: ...`;
+     window.open(`https://wa.me/+542221440844?text=${encodeURIComponent(msj)}`,'_blank'); };
+
   pagarBtn?.addEventListener('click', ()=> window.pagarCarrito());
 
   /* ---------------- Ordenar productos visibles ---------------- */
@@ -919,19 +1206,46 @@ window.mostrarLogin = function () {
 
   /* ---------------- Submenús móviles ---------------- */
   if (window.innerWidth <= 768) {
-    document.querySelectorAll('.abrir-submenu').forEach(link => {
-      link.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelectorAll('.sub-menu-fixed').forEach(m => m.classList.remove('show-mobile'));
-        const id = this.dataset.submenu; const sub = $(id);
-        if (sub) {
-          sub.classList.add('show-mobile');
-          const volverBtn = sub.querySelector('.volver-btn');
-          if (volverBtn) { volverBtn.style.display='block'; volverBtn.onclick=()=> sub.classList.remove('show-mobile'); }
-          const mh = $('menuHeader'); if (mh) mh.style.display='none';
-        }
-      });
-    });
+document.querySelectorAll('.abrir-submenu').forEach(link => {
+  link.addEventListener('click', (e)=>{
+    e.preventDefault();
+    e.stopPropagation(); // evita burbujeo raro
+
+    const id = link.dataset.submenu;
+    const sub = document.getElementById(id);
+    if (!sub) return;
+
+    const isOpen = sub.classList.contains('show-mobile');
+    closeAllSubmenus();
+
+    if (isOpen) {
+      sub.classList.remove('show-mobile');
+      if (menuHeader) menuHeader.style.display = '';
+    } else {
+      sub.classList.add('show-mobile');
+
+      const volverBtn = sub.querySelector('.volver-btn');
+      if (volverBtn) {
+        volverBtn.style.display = 'block';
+        volverBtn.onclick = (ev) => {
+          ev?.stopPropagation?.();
+          sub.classList.remove('show-mobile');
+          if (menuHeader) menuHeader.style.display = '';
+        };
+      }
+      if (menuHeader) menuHeader.style.display = 'none';
+
+      // Activo overlay + menú con un micro-delay para no comer el mismo click
+      overlayJustOpened = true;
+      setTimeout(()=> { overlayJustOpened = false; }, 180);
+      setTimeout(()=> {
+        overlay.classList.add('active');
+        menu.classList.add('abierto');
+      }, 0);
+    }
+  });
+});
+
   }
 
   document.addEventListener('click', (e)=>{
@@ -980,3 +1294,108 @@ window.mostrarLogin = function () {
   if (window.gsap) { gsap.from('.producto', { opacity:0, y:40, stagger:0.1, duration:0.8, ease:'power3.out' }); }
 });
 
+/* ---------------- Submenús móviles (toggle consistente) ---------------- */
+(function initMobileMenus(){
+  const menu = document.getElementById('menu');
+  const overlay = document.getElementById('overlay');
+  const menuHeader = document.getElementById('menuHeader');
+
+  if (!menu || !overlay) return;
+
+  function closeAllSubmenus(){
+    document.querySelectorAll('.sub-menu-fixed').forEach(m => m.classList.remove('show-mobile'));
+    if (menuHeader) menuHeader.style.display = '';
+    menu.classList.remove('submenu-open');            // 👈 NUEVO: salgo del estado de submenú
+  }
+
+  document.querySelectorAll('.abrir-submenu').forEach(link => {
+    link.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const id = link.dataset.submenu;
+      const sub = document.getElementById(id);
+      if (!sub) return;
+
+      const isOpen = sub.classList.contains('show-mobile');
+      closeAllSubmenus();
+
+      if (isOpen) {
+        sub.classList.remove('show-mobile');
+
+      } else {
+        sub.classList.add('show-mobile');
+        menu.classList.add('submenu-open');           // 👈 NUEVO: oculto/inhabilito la lista principal (CSS abajo)
+        const volverBtn = sub.querySelector('.volver-btn');
+        if (volverBtn) {
+          volverBtn.style.display = 'block';
+          volverBtn.onclick = () => {
+            sub.classList.remove('show-mobile');
+
+            menu.classList.remove('submenu-open');    // 👈 NUEVO: vuelvo a mostrar/rehabilitar la lista principal
+          };
+        }
+
+        overlay.classList.add('active');
+        menu.classList.add('abierto');
+      }
+    });
+  });
+
+  // Cierre por overlay
+  overlay.addEventListener('click', closeAllSubmenus);
+
+  // Fallback delegado por si alguna flecha "Volver" no registró el onclick
+  document.addEventListener('click', (e)=>{
+    const volver = e.target.closest?.('.volver-btn');
+    if (!volver) return;
+    const sub = volver.closest('.sub-menu-fixed');
+    if (sub) sub.classList.remove('show-mobile');
+
+    menu.classList.remove('submenu-open');
+  });
+})();
+
+
+
+
+
+
+// === Helpers consistentes para cerrar todo ===
+function closeMenuAndOverlay() {
+  const menu = document.getElementById('menu');
+  const overlay = document.getElementById('overlay');
+  const menuHeader = document.getElementById('menuHeader');
+
+  // cerrar overlay + menú + submenús
+  overlay?.classList.remove('active');
+  menu?.classList.remove('abierto', 'submenu-open');
+  document.body.classList.remove('no-scroll');
+
+  document.querySelectorAll('.sub-menu-fixed.show-mobile, .sub-menu-fixed.mostrar')
+    .forEach(s => s.classList.remove('show-mobile', 'mostrar'));
+
+  // asegurá el header del menú visible (logo + "Categorías")
+  if (menuHeader) {
+    menuHeader.style.display = 'flex';
+    menuHeader.style.opacity = '1';
+    menuHeader.style.visibility = 'visible';
+  }
+}
+// 🔹 Resetear barra de búsqueda y vista al cambiar de categoría
+function resetearBusquedaYCategoria() {
+  const inputBusqueda = document.getElementById('busqueda-productos');
+  const mensajeNoResultados = document.getElementById('mensaje-no-resultados');
+
+  // Limpiar barra de búsqueda
+  if (inputBusqueda) {
+    inputBusqueda.value = '';
+    inputBusqueda.dispatchEvent(new Event('input')); // fuerza refresco visual
+  }
+
+  // Asegurar que los carteles de categoría vuelvan a mostrarse
+  document.querySelectorAll('.barra-categoria, .titulo-categoria').forEach(el => {
+    el.style.display = '';
+  });
+
+  // Ocultar mensaje "No se encontraron productos" si existe
+  if (mensajeNoResultados) mensajeNoResultados.style.display = 'none';
+}
