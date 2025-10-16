@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="es">
+
+  <html lang="es-AR">
+
 <head>
   <meta charset="UTF-8" />
 <!-- antes: content="width=device-width, initial-scale=1.0" -->
@@ -107,9 +109,7 @@
  </li>
 
 
-  <button id="admin-btn" class="footer-btn" data-admin-trigger onclick="mostrarLogin()">
-  <i class="fa-solid fa-hammer"></i>
-</button>
+
 
 
     <!-- otras categorías --> 
@@ -222,7 +222,14 @@
       </ul>
 
 
-      
+<div class="footer-btns">
+  <button id="pedidos-btn" class="footer-btn" title="Pedidos">
+    <i class="fa-solid fa-list"></i>
+  </button>
+  <button id="admin-btn" class="footer-btn" data-admin-trigger onclick="mostrarLogin()" title="Admin">
+    <i class="fa-solid fa-hammer"></i>
+  </button>
+</div>
 </nav>
 
       <div id="submenu-categorias">
@@ -264,6 +271,16 @@
     </button>
   </div>
   <div id="cart-toast" class="cart-toast" aria-live="polite" aria-atomic="true"></div>
+</div>
+<!-- Modal de confirmación de compra -->
+<div id="modal-confirmacion" class="modal-confirmacion oculto">
+  <div class="modal-contenido">
+    <p>¿Estás seguro de realizar este pedido?</p>
+    <div class="modal-botones">
+      <button id="confirmar-pedido" class="btn-confirmar">Sí, confirmar</button>
+      <button id="cancelar-pedido" class="btn-cancelar">Cancelar</button>
+    </div>
+  </div>
 </div>
 
  
@@ -326,6 +343,69 @@
 
 </div>
 
+
+<!-- =============================
+     SECCIÓN DE PEDIDOS REALIZADOS
+     ============================= -->
+<div id="contenedor-pedidos" class="oculto">
+  <h2 class="titulo-pedidos">PEDIDOS REALIZADOS</h2>
+
+ <!-- ======= FILTRO DE PEDIDOS PERSONALIZADO ======= -->
+<button id="toggle-filtro" class="toggle-filtro-btn">
+  📅 Ver pedidos por rango de fechas
+</button>
+
+<div id="filtro-pedidos-container" class="filtro-pedidos oculto">
+  <h3>📊 Filtrar pedidos por rango de fechas</h3>
+
+  <div class="filtro-fechas">
+    <label>
+      Desde:
+      <input type="date" id="fecha-inicio" />
+    </label>
+    <label>
+      Hasta:
+      <input type="date" id="fecha-fin" />
+    </label>
+    <button id="btn-filtrar" class="filtro-btn">Aplicar filtro</button>
+  </div>
+
+  <div id="resultado-filtro" class="resultado-filtro"></div>
+</div>
+
+<div class="pedidos-header">
+  <span>#</span>
+  <span>Fecha</span>
+  <span>Usuario</span>
+  <span>Detalle</span>
+  <span>Total</span>
+  <span>Puntos</span>
+  <span>Acciones</span>
+</div>
+
+
+
+
+  <div id="lista-pedidos" class="lista-pedidos">
+
+  </div>
+
+</div>
+<!-- Modal de confirmación -->
+<div id="modal-accion" class="modal-accion oculto">
+  <div class="modal-content">
+    <p id="modal-mensaje">¿Estás seguro?</p>
+    <div class="modal-botones">
+      <button id="modal-si" class="btn-si">Sí</button>
+      <button id="modal-no" class="btn-no">No</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
     <div class="container oculto">
       
 <div class="barra-categoria" id="barra-categoria" style="display: none;">
@@ -351,7 +431,10 @@
 
 
 
+
 <div id="contenedor-productos"></div>
+
+
 
  <div class="productos" id="productos-container">
         
@@ -388,6 +471,8 @@
 
     <!-- Panel autenticado -->
     <section id="panel-usuario" class="oculto">
+      <p id="usuario-label" style="font-weight:600;margin-top:10px;"></p>
+
       <p class="small">Sesión iniciada como <strong id="user-email"></strong></p>
       <p class="small">Puntos: <strong id="user-puntos">0</strong></p>
       <button id="btn-logout" class="cta">Cerrar sesión</button>
@@ -396,7 +481,8 @@
     <!-- Panel login/registro -->
 <div id="panel-auth"> <!-- Login -->
   <h2>Entrar</h2>
-  <input id="login-email" type="email" placeholder="Correo" />
+  <input type="text" id="login-email" placeholder="Correo o nombre de usuario" required>
+
   <div class="password-wrapper">
     <input id="login-pass" type="password" placeholder="Contraseña" />
       <button type="button" class="toggle-password" onclick="togglePassword('login-pass', this)">
@@ -415,6 +501,8 @@
 
 <div id="panel-register" class="oculto"> <!-- Registro -->
   <h2>Crear cuenta</h2>
+
+  <input type="text" id="nombreUsuario" placeholder="Nombre de usuario" required>
   <input id="reg-email" type="email" placeholder="Correo" />
   <input id="reg-pass" type="password" placeholder="Contraseña" />
   <input id="reg-tel" type="text" placeholder="Teléfono (opcional)" />
@@ -516,6 +604,10 @@ const firebaseConfig = {
   <span id="app-alert-text"></span>
   <button onclick="document.getElementById('app-alert').style.display='none'" style="float:right;border:0;background:#742081;color:#fff;border-radius:10px;padding:6px 10px;margin-left:12px">Cerrar</button>
 </div>
+
+
+
+
 
 
 </body>

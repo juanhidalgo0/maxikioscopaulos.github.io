@@ -185,6 +185,12 @@ if (menuToggle && menu && overlay && header) {
 
 
 
+
+
+
+
+
+
   
   /* ---------------- Auth + Puntos ---------------- */
   if (!window.firebase) return; // corta si no cargaste los SDKs
@@ -240,46 +246,141 @@ if (menuToggle && menu && overlay && header) {
   const resendLimiter = createLimiter('cooldown_resend_verif', 60);
   const resetLimiter  = createLimiter('cooldown_reset_pass', 60);
 
-  // Login
-  btnLogin?.addEventListener('click', async () => {
-    const email = getVal('login-email');
-    const pass  = getVal('login-pass');
-    if(!email || !pass) return mostrarAviso('Completá email y contraseña.');
-    try{
-      const cred = await auth.signInWithEmailAndPassword(email, pass);
-      if (!cred.user.emailVerified) { mostrarAviso('Tenés que verificar tu correo. Podés reenviar el mail con el botón de abajo.'); setResendVisibility(cred.user); showAuthPanel(); return; }
-      mostrarAviso('Sesión iniciada. ¡Bienvenido!');
-    }catch(e){
-      console.error(e);
-      if (e?.code === 'auth/invalid-login-credentials' || e?.code === 'auth/wrong-password' || e?.code === 'auth/user-not-found') mostrarAviso("Email o contraseña incorrectos. Si no recordás la contraseña, usá 'Olvidé mi contraseña'.");
-      else if (e?.code === 'auth/too-many-requests') mostrarAviso('Demasiados intentos. Esperá unos minutos y probá de nuevo.');
-      else mostrarAviso('No se pudo iniciar sesión. ' + (e?.message||''));
+// ===  LOGIN ===
+btnLogin?.addEventListener('click', async () => {
+  const identificador = getVal('login-email'); // puede ser email o nombre de usuario
+  const pass = getVal('login-pass');
+
+  if (!identificador || !pass)
+    return mostrarAviso('Completá usuario/email y contraseña.');
+
+  btnLogin.disabled = true;
+
+  try {
+    let emailParaLogin = identificador.trim().toLowerCase();
+
+    // Si no es un email (no contiene "@"), buscar en la base de datos
+    if (!emailParaLogin.includes('@')) {
+      const usuariosSnap = await db.ref('/usuarios').once('value');
+      let encontrado = null;
+
+      if (usuariosSnap.exists()) {
+        usuariosSnap.forEach((snap) => {
+          const userData = snap.val();
+          if (userData.nombreUsuario?.toLowerCase() === emailParaLogin) {
+            encontrado = userData.email;
+          }
+        });
+      }
+
+      if (!encontrado) {
+        mostrarAviso('Usuario no encontrado.');
+        btnLogin.disabled = false;
+        return;
+      }
+
+      emailParaLogin = encontrado;
     }
-  });
+
+    // Iniciar sesión con el correo encontrado o ingresado
+    const cred = await auth.signInWithEmailAndPassword(emailParaLogin, pass);
+    mostrarAviso('Inicio de sesión exitoso ✅');
+
+    // Mostrar nombre de usuario al iniciar sesión
+    const uid = cred.user.uid;
+    const userSnap = await db.ref(`/usuarios/${uid}/nombreUsuario`).once('value');
+    const nombreUsuario = userSnap.val();
+
+    const etiquetaUsuario = document.getElementById('usuario-label');
+    if (etiquetaUsuario && nombreUsuario)
+      etiquetaUsuario.textContent = `Usuario: ${nombreUsuario}`;
+
+  } catch (e) {
+    console.error(e);
+    if (e.code === 'auth/wrong-password')
+      mostrarAviso('Contraseña incorrecta.');
+    else if (e.code === 'auth/user-not-found')
+      mostrarAviso('Usuario o email no encontrado.');
+    else
+      mostrarAviso('Error al iniciar sesión: ' + (e.message || ''));
+  } finally {
+    btnLogin.disabled = false;
+  }
+});
+
 
   // Registro → verificación + panel verify
-  let pendingVerifyEmail = null;
-  btnRegister?.addEventListener('click', async () => {
-    const email = getVal('reg-email');
-    const pass  = getVal('reg-pass');
-    const tel   = getVal('reg-tel');
-    if(!email || !pass) return mostrarAviso('Completá email y contraseña.');
-    if(pass.length < 6) return mostrarAviso('La contraseña debe tener al menos 6 caracteres.');
-    btnRegister.disabled = true;
-    try{
-      const cred = await auth.createUserWithEmailAndPassword(email, pass);
-      await db.ref(`/usuarios/${cred.user.uid}`).set({ email, tel: tel||null, creadoEn: Date.now() });
-      await db.ref(`/puntos/${cred.user.uid}`).set({ puntos: 0, actualizadoEn: Date.now() });
-      await cred.user.sendEmailVerification({ url: `${location.origin}/` });
-      pendingVerifyEmail = email; // evita que el onAuthStateChanged pise el panel
-      await auth.signOut();
-      showVerifyPanel(email);
-    }catch(e){
-      console.error(e);
-      if (e?.code === 'auth/email-already-in-use') mostrarAviso('Ese email ya está en uso.');
-      else mostrarAviso('No se pudo crear la cuenta: ' + (e?.message||''));
-    }finally{ btnRegister.disabled = false; }
-  });
+// Registro con nombre de usuario único + verificación
+let pendingVerifyEmail = null;
+btnRegister?.addEventListener('click', async () => {
+  const email = getVal('reg-email');
+  const pass  = getVal('reg-pass');
+  const tel   = getVal('reg-tel');
+  const nombreUsuarioInput = document.getElementById('nombreUsuario');
+  const nombreUsuario = nombreUsuarioInput?.value?.trim()?.toLowerCase() || '';
+
+  if (!email || !pass || !nombreUsuario)
+    return mostrarAviso('Completá email, contraseña y nombre de usuario.');
+  if (pass.length < 6)
+    return mostrarAviso('La contraseña debe tener al menos 6 caracteres.');
+
+  btnRegister.disabled = true;
+
+  try {
+    const usuariosRef = db.ref('/usuarios');
+    const snapshot = await usuariosRef.once('value');
+    let nombreRepetido = false;
+    let contadorUsuarios = 0;
+
+    if (snapshot.exists()) {
+      snapshot.forEach(userSnap => {
+        const u = userSnap.val();
+        contadorUsuarios++;
+        if (u.nombreUsuario?.toLowerCase() === nombreUsuario) {
+          nombreRepetido = true;
+        }
+      });
+    }
+
+    if (nombreRepetido) {
+      mostrarAviso('Ese nombre de usuario ya está en uso. Elegí otro.');
+      btnRegister.disabled = false;
+      return;
+    }
+
+    // Crear usuario
+    const cred = await auth.createUserWithEmailAndPassword(email, pass);
+    const numeroUsuario = contadorUsuarios + 1;
+
+    await db.ref(`/usuarios/${cred.user.uid}`).set({
+      email,
+      tel: tel || null,
+      nombreUsuario,
+      numeroUsuario,
+      creadoEn: Date.now()
+    });
+
+    await db.ref(`/puntos/${cred.user.uid}`).set({
+      puntos: 0,
+      actualizadoEn: Date.now()
+    });
+
+    await cred.user.sendEmailVerification({ url: `${location.origin}/` });
+    pendingVerifyEmail = email;
+    await auth.signOut();
+    showVerifyPanel(email);
+
+  } catch (e) {
+    console.error(e);
+    if (e?.code === 'auth/email-already-in-use')
+      mostrarAviso('Ese email ya está en uso.');
+    else
+      mostrarAviso('No se pudo crear la cuenta: ' + (e?.message || ''));
+  } finally {
+    btnRegister.disabled = false;
+  }
+});
+
 // Logout
 btnLogout?.addEventListener('click', async () => {
   try {
@@ -327,20 +428,56 @@ btnLogout?.addEventListener('click', async () => {
     }
   })();
 
-  // onAuthStateChanged (único)
-  let puntosRef = null;
-  auth.onAuthStateChanged((user) => {
-    if (puntosRef) { puntosRef.off(); puntosRef = null; }
-    setResendVisibility(user);
-    if (pendingVerifyEmail) { showVerifyPanel(pendingVerifyEmail); return; }
-    if (user && user.emailVerified) {
-      showUserPanel(user.email || '');
-      puntosRef = db.ref(`/puntos/${user.uid}/puntos`);
-      puntosRef.on('value', (snap)=>{ const val = snap.val(); if(userPuntosSpan) userPuntosSpan.textContent = (val ?? 0).toString(); });
-    } else {
-      showAuthPanel();
-    }
-  });
+// === onAuthStateChanged (único) ===
+let puntosRef = null;
+
+auth.onAuthStateChanged((user) => {
+  // --- Referencias del DOM ---
+  const userPuntosSpan = document.getElementById("user-puntos"); // <-- ESTA es la correcta
+  const etiquetaUsuario = document.getElementById("usuario-label");
+
+  // --- Limpiar listeners anteriores ---
+  if (puntosRef) {
+    puntosRef.off();
+    puntosRef = null;
+  }
+
+  setResendVisibility(user);
+  if (pendingVerifyEmail) {
+    showVerifyPanel(pendingVerifyEmail);
+    return;
+  }
+
+  if (user && user.emailVerified) {
+    showUserPanel(user.email || "");
+
+    // --- Mostrar nombre de usuario ---
+    db.ref(`/usuarios/${user.uid}/nombreUsuario`)
+      .once("value")
+      .then((snap) => {
+        const nombreUsuario = snap.val();
+        if (etiquetaUsuario && nombreUsuario) {
+          etiquetaUsuario.textContent = `Usuario: ${nombreUsuario}`;
+        }
+      });
+
+    // --- Mostrar puntos del usuario ---
+    puntosRef = db.ref(`/puntos/${user.uid}/puntos`);
+    puntosRef.on("value", (snap) => {
+      const puntos = snap.val() ?? 0;
+      if (userPuntosSpan) {
+        userPuntosSpan.textContent = puntos.toString();
+      }
+    });
+
+  } else {
+    showAuthPanel();
+
+    // Reset visual si no hay usuario
+    if (etiquetaUsuario) etiquetaUsuario.textContent = "Usuario: -";
+    if (userPuntosSpan) userPuntosSpan.textContent = "0";
+  }
+});
 
   /* ---------------- Productos (Firebase DB) ---------------- */
   function cargarProductosDesdeFirebase(callback) {
@@ -1047,7 +1184,250 @@ if (btnVaciar) {
     msj+=`\n*Total: $${total.toFixed(2)}*\n\nMi dirección es: ...`;
      window.open(`https://wa.me/+542221440844?text=${encodeURIComponent(msj)}`,'_blank'); };
 
-  pagarBtn?.addEventListener('click', ()=> window.pagarCarrito());
+ /* ---------------- Confirmación y registro de pedidos ---------------- */
+ // === CONFIRMAR O ELIMINAR PEDIDOS ===
+document.addEventListener("click", (e) => {
+  const btnConfirmar = e.target.closest(".btn-confirmar");
+  const btnCancelar = e.target.closest(".btn-cancelar");
+  const modal = document.getElementById("modal-accion");
+  const modalMensaje = document.getElementById("modal-mensaje");
+  const modalSi = document.getElementById("modal-si");
+  const modalNo = document.getElementById("modal-no");
+
+  if (!btnConfirmar && !btnCancelar) return;
+
+  const pedidoItem = e.target.closest(".pedido-item");
+  const pedidoId = btnConfirmar?.dataset.id || btnCancelar?.dataset.id;
+  const esConfirmar = !!btnConfirmar;
+
+  if (!pedidoId || !pedidoItem) return;
+
+  // Mostrar modal
+  modal.classList.remove("oculto");
+  modalMensaje.textContent = esConfirmar
+    ? "¿Confirmar este pedido?"
+    : "¿Eliminar este pedido?";
+
+  // Eliminar listeners anteriores
+  modalSi.replaceWith(modalSi.cloneNode(true));
+  modalNo.replaceWith(modalNo.cloneNode(true));
+
+  const newModalSi = document.getElementById("modal-si");
+  const newModalNo = document.getElementById("modal-no");
+
+  // Acciones de botones
+  newModalNo.addEventListener("click", () => {
+    modal.classList.add("oculto");
+  });
+
+  newModalSi.addEventListener("click", async () => {
+    modal.classList.add("oculto");
+
+    if (esConfirmar) {
+      // --- Confirmar pedido ---
+      try {
+        const pedidoRef = firebase.database().ref(`pedidos/${pedidoId}`);
+        await pedidoRef.update({ estado: "APROBADO" });
+
+// --- Visualmente marcar como aprobado ---
+pedidoItem.classList.add("pedido-aprobado");
+const texto = pedidoItem.querySelector(".pedido-texto");
+if (texto && !texto.textContent.includes("(APROBADO)")) {
+  texto.textContent += " (APROBADO)";
+}
+
+
+        // Obtener UID del pedido para asignar puntos
+        const snap = await pedidoRef.once("value");
+        const pedido = snap.val();
+        if (pedido?.uid) {
+          const totalPedido = pedido.total || 0;
+          const puntosGanados = Math.floor(totalPedido / 50);
+
+          const puntosRef = firebase.database().ref(`puntos/${pedido.uid}/puntos`);
+          await puntosRef.transaction((actual) => (actual || 0) + puntosGanados);
+
+          console.log(`🎁 ${puntosGanados} puntos acreditados al usuario ${pedido.usuario}`);
+
+          // Aviso visual
+          const aviso = document.createElement("div");
+          aviso.classList.add("aviso-puntos");
+          aviso.textContent = `✅ Pedido confirmado. ${puntosGanados} puntos acreditados.`;
+          document.body.appendChild(aviso);
+          setTimeout(() => aviso.remove(), 4000);
+        }
+      } catch (err) {
+        console.error("❌ Error al confirmar pedido:", err);
+      }
+    } else {
+      // --- Eliminar pedido ---
+      try {
+        await firebase.database().ref(`pedidos/${pedidoId}`).remove();
+        pedidoItem.remove();
+
+        const aviso = document.createElement("div");
+        aviso.classList.add("aviso-puntos");
+        aviso.textContent = "❌ Pedido eliminado correctamente.";
+        document.body.appendChild(aviso);
+        setTimeout(() => aviso.remove(), 3000);
+      } catch (err) {
+        console.error("❌ Error al eliminar pedido:", err);
+      }
+    }
+  });
+});
+
+const modal = document.getElementById("modal-confirmacion");
+const confirmarPedidoBtn = document.getElementById("confirmar-pedido");
+const cancelarPedidoBtn = document.getElementById("cancelar-pedido");
+const listaPedidos = document.getElementById("lista-pedidos");
+let contadorPedidos = 1;
+
+// Abrir modal al hacer click en pagar
+if (pagarBtn) {
+  pagarBtn.addEventListener("click", () => {
+    if (carrito.length === 0) return alert("El carrito está vacío.");
+    modal.classList.remove("oculto");
+  });
+}
+
+// Cerrar modal sin confirmar
+cancelarPedidoBtn?.addEventListener("click", () => {
+  modal.classList.add("oculto");
+});
+
+// Confirmar pedido
+confirmarPedidoBtn?.addEventListener("click", () => {
+  modal.classList.add("oculto");
+
+  // Generar texto del pedido
+  let textoPedido = "";
+  carrito.forEach((it) => {
+    textoPedido += `${it.cantidad} x ${it.nombre} ($${it.precio.toFixed(2)}) | `;
+  });
+  if (!textoPedido) textoPedido = "Pedido vacío";
+
+  const pedidoBase = {
+    fecha: new Date().toLocaleString(),
+    texto: textoPedido,
+    estado: "pendiente",
+  };
+
+    // Calcular total numérico del pedido
+  const totalPedido = carrito.reduce((acc, it) => acc + it.precio * it.cantidad, 0);
+  pedidoBase.total = totalPedido;
+
+
+  // === Guardar pedido con número correlativo y usuario ===
+  (async () => {
+    const user = firebase.auth().currentUser;
+    let nombreUsuario = "Invitado";
+
+    if (user) {
+      try {
+        const snap = await firebase.database().ref(`/usuarios/${user.uid}/nombreUsuario`).once("value");
+        nombreUsuario = snap.val() || user.email || "Desconocido";
+      } catch (e) {
+        console.error("Error al obtener nombreUsuario:", e);
+      }
+    }
+
+    pedidoBase.usuario = nombreUsuario;
+    pedidoBase.uid = user ? user.uid : null;
+
+    // === Obtener y actualizar contador global de pedidos ===
+    const contadorRef = firebase.database().ref("contadorPedidos");
+    let numeroPedido = 1;
+
+    try {
+      const snapshot = await contadorRef.once("value");
+      numeroPedido = (snapshot.val() || 0) + 1;
+      await contadorRef.set(numeroPedido);
+    } catch (err) {
+      console.error("Error al actualizar contador de pedidos:", err);
+    }
+
+    pedidoBase.numeroPedido = numeroPedido;
+
+  // === Guardar pedido en Firebase ===
+const nuevoPedidoRef = firebase.database().ref("pedidos").push();
+await nuevoPedidoRef.set(pedidoBase);
+
+console.log("✅ Pedido guardado:", pedidoBase);
+
+// === SISTEMA DE PUNTOS ===
+if (user && Array.isArray(carrito) && carrito.length > 0) {
+  try {
+    // Calcular total del pedido
+    const totalPedido = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+
+    // Calcular puntos ganados (1 punto por cada $50)
+    const puntosGanados = Math.floor(totalPedido / 50);
+
+    if (puntosGanados > 0) {
+      const puntosRef = firebase.database().ref(`puntos/${user.uid}/puntos`);
+      await puntosRef.transaction(actual => (actual || 0) + puntosGanados);
+
+      console.log(`🎁 ${puntosGanados} puntos sumados al usuario ${pedidoBase.usuario}`);
+
+      // Mostrar mensaje en pantalla
+      const aviso = document.createElement("div");
+      aviso.classList.add("aviso-puntos");
+      aviso.textContent = `🎉 Ganaste ${puntosGanados} puntos con tu compra`;
+      document.body.appendChild(aviso);
+      setTimeout(() => aviso.remove(), 4000);
+    }
+  } catch (error) {
+    console.error("❌ Error al asignar puntos:", error);
+  }
+}
+
+// === Mostrar visualmente ===
+const nuevoPedido = document.createElement("div");
+nuevoPedido.classList.add("pedido-item");
+nuevoPedido.innerHTML = `
+  <span class="pedido-numero">#${String(numeroPedido).padStart(3, "0")}</span>
+  <span class="pedido-fecha">${pedidoBase.fecha}</span>
+  <span class="pedido-usuario">${pedidoBase.usuario}</span>
+  <span class="pedido-texto">${pedidoBase.texto}</span>
+  <div class="pedido-botones">
+    <button class="btn-confirmar"><i class="fa-solid fa-check"></i></button>
+    <button class="btn-cancelar"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+`;
+listaPedidos?.prepend(nuevoPedido);
+
+// Vaciar carrito
+carrito = [];
+localStorage.removeItem("carrito");
+actualizarCarrito();
+})();
+
+
+
+
+
+
+
+
+  // Enviar pedido por WhatsApp (mismo formato original)
+  let msj = "*¡Hola! Quiero hacer este pedido:*\n\n";
+  carrito.forEach(
+    (it) => (msj += `• ${it.nombre} x${it.cantidad} - $${it.precio.toFixed(2)}\n`)
+  );
+  const total = carrito.reduce((a, it) => a + it.precio * it.cantidad, 0);
+  msj += `\n*Total: $${total.toFixed(2)}*\n\nMi dirección es: ...`;
+  window.open(
+    `https://wa.me/+542221440844?text=${encodeURIComponent(msj)}`,
+    "_blank"
+  );
+
+  // Vaciar carrito luego de confirmar
+  carrito = [];
+  localStorage.removeItem("carrito");
+  actualizarCarrito();
+});
+
 
   /* ---------------- Ordenar productos visibles ---------------- */
   $('ordenar')?.addEventListener('change', (e)=> ordenarProductosVisibles(e.target.value));
@@ -1292,6 +1672,8 @@ document.querySelectorAll('.abrir-submenu').forEach(link => {
   const observer = new IntersectionObserver((entries)=> entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.1 });
   document.querySelectorAll('.producto').forEach(el => observer.observe(el));
   if (window.gsap) { gsap.from('.producto', { opacity:0, y:40, stagger:0.1, duration:0.8, ease:'power3.out' }); }
+
+  
 });
 
 /* ---------------- Submenús móviles (toggle consistente) ---------------- */
@@ -1399,3 +1781,233 @@ function resetearBusquedaYCategoria() {
   // Ocultar mensaje "No se encontraron productos" si existe
   if (mensajeNoResultados) mensajeNoResultados.style.display = 'none';
 }
+// === FILTRO PERSONALIZADO DE PEDIDOS POR RANGO DE FECHAS ===
+document.addEventListener("DOMContentLoaded", () => {
+  const toggleBtn = document.getElementById("toggle-filtro");
+  const filtroCont = document.getElementById("filtro-pedidos-container");
+  const btnFiltrar = document.getElementById("btn-filtrar");
+  const inputInicio = document.getElementById("fecha-inicio");
+  const inputFin = document.getElementById("fecha-fin");
+  const res = document.getElementById("resultado-filtro");
+
+  if (!window.firebase) return;
+  const pedidosRef = firebase.database().ref("pedidos");
+
+  // Mostrar / ocultar panel
+  toggleBtn?.addEventListener("click", () => {
+    filtroCont.classList.toggle("oculto");
+    toggleBtn.textContent = filtroCont.classList.contains("oculto")
+      ? "📅 Ver pedidos por rango de fechas"
+      : "❌ Ocultar filtro";
+  });
+
+  // Función principal
+  async function filtrarPedidosPorRango() {
+    const fechaInicio = inputInicio.value;
+    const fechaFin = inputFin.value;
+
+    if (!fechaInicio || !fechaFin) {
+      alert("Por favor, seleccioná ambas fechas.");
+      return;
+    }
+
+    const inicio = new Date(fechaInicio);
+    const fin = new Date(fechaFin);
+    fin.setHours(23, 59, 59, 999);
+
+    const snap = await pedidosRef.once("value");
+    const data = snap.val();
+    if (!data) {
+      res.innerHTML = "<p>No hay pedidos registrados.</p>";
+      return;
+    }
+
+    const pedidosFiltrados = Object.values(data).filter((pedido) => {
+      const fechaPedido = new Date(pedido.fecha);
+      return fechaPedido >= inicio && fechaPedido <= fin;
+    });
+
+    mostrarPedidosFiltrados(pedidosFiltrados, fechaInicio, fechaFin);
+  }
+
+  // Mostrar resultados
+  function mostrarPedidosFiltrados(pedidos, desde, hasta) {
+    if (pedidos.length === 0) {
+      res.innerHTML = `<p>No hay pedidos entre ${desde} y ${hasta}.</p>`;
+      return;
+    }
+
+    const total = pedidos.length;
+    const totalPesos = pedidos.reduce((sum, p) => sum + (Number(p.total) || 0), 0);
+    const totalPuntos = Math.floor(totalPesos / 50);
+
+    res.innerHTML = `
+      <h4>📦 Total de pedidos: ${total}</h4>
+      <p>🗓️ Desde <strong>${desde}</strong> hasta <strong>${hasta}</strong></p>
+      <p>💰 Monto total: <strong>$${totalPesos.toLocaleString("es-AR")}</strong></p>
+      <p>💎 Puntos generados: <strong>${totalPuntos}</strong></p>
+
+      <div class="lista-filtrada">
+        ${pedidos
+          .map(
+            (p) => `
+          <div class="pedido-filtrado">
+            <span>#${p.numeroPedido || "?"}</span>
+            <span>${p.fecha}</span>
+            <span>${p.usuario}</span>
+            <span>${p.texto}</span>
+            <span>💰 $${Number(p.total || 0).toLocaleString("es-AR")}</span>
+          </div>`
+          )
+          .join("")}
+      </div>
+    `;
+  }
+
+  // Evento de click
+  btnFiltrar?.addEventListener("click", filtrarPedidosPorRango);
+});
+
+// === Cargar pedidos desde Firebase en tiempo real ===
+document.addEventListener("DOMContentLoaded", () => {
+  const listaPedidos = document.getElementById("lista-pedidos");
+  const spanPendientes = document.getElementById("cant-pendientes");
+  const spanAprobados = document.getElementById("cant-aprobados");
+
+  if (!listaPedidos || !window.firebase) return;
+
+  const pedidosRef = firebase.database().ref("pedidos");
+
+  pedidosRef.on("value", (snapshot) => {
+    const data = snapshot.val();
+    listaPedidos.innerHTML = ""; // limpia lista actual
+
+    let pendientes = 0;
+    let aprobados = 0;
+
+    if (!data) {
+      listaPedidos.innerHTML = "<p>No hay pedidos registrados.</p>";
+      if (spanPendientes) spanPendientes.textContent = "0";
+      if (spanAprobados) spanAprobados.textContent = "0";
+      return;
+    }
+
+    Object.entries(data).forEach(([id, pedido]) => {
+      const item = document.createElement("div");
+      item.classList.add("pedido-item");
+
+      const esAprobado = pedido.estado === "APROBADO";
+      if (esAprobado) aprobados++;
+      else pendientes++;
+
+      const total = Number(pedido.total) || 0;
+      const puntos = Math.floor(total / 50); // 1 punto cada $50 (ajustable)
+
+      const textoPedido = pedido.texto || "";
+
+      item.innerHTML = `
+        <span class="pedido-numero">#${String(pedido.numeroPedido || 0).padStart(3, "0")}</span>
+        <span class="pedido-fecha">${pedido.fecha || "-"}</span>
+        <span class="pedido-usuario">${pedido.usuario || "Usuario desconocido"}</span>
+        <span class="pedido-texto">${textoPedido}</span>
+        <span class="pedido-total">💰 $${total.toLocaleString("es-AR")}</span>
+        <span class="pedido-puntos">💎 ${puntos}</span>
+        <div class="pedido-botones">
+          ${
+            esAprobado
+              ? `<span class="pedido-estado">✅ APROBADO</span>`
+              : `
+                <button class="btn-confirmar" data-id="${id}">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+                <button class="btn-cancelar" data-id="${id}">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              `
+          }
+        </div>
+      `;
+
+      listaPedidos.prepend(item);
+    });
+
+    // Actualiza contadores en la barra superior
+    if (spanPendientes) spanPendientes.textContent = pendientes;
+    if (spanAprobados) spanAprobados.textContent = aprobados;
+  });
+});
+
+
+
+/*--------------FINAL DEL DOM CONT LOADED----------*/
+
+// === PANTALLA COMPLETA DE PEDIDOS ===
+window.addEventListener("load", () => {
+  const pedidosBtn = document.getElementById("pedidos-btn");
+  const inicioBtn = document.querySelector(".inicio-header");
+  const menu = document.getElementById("menu");
+  const overlay = document.getElementById("overlay");
+  const header = document.querySelector(".header");
+  const pantallaInicio = document.getElementById("pantalla-inicio");
+  const pantallaProductos = document.getElementById("pantalla-productos");
+  const productosContainer = document.getElementById("productos-container");
+  const contenedorPedidos = document.getElementById("contenedor-pedidos");
+
+  if (!pedidosBtn || !contenedorPedidos) return;
+
+  // === Función para cerrar menú ===
+  function cerrarMenu() {
+    menu?.classList.remove("abierto");
+    overlay?.classList.remove("active");
+    header?.classList.remove("menu-open", "opaco");
+  }
+
+  // === Función para resetear toda la página (igual que INICIO) ===
+  function resetearTodo() {
+    // Cierra el menú
+    cerrarMenu();
+
+    // Limpia productos y categorías
+    document.querySelector(".categoria-activa")?.classList.remove("categoria-activa");
+    const cartelCategoria = document.querySelector(".cartel-categoria");
+    if (cartelCategoria) cartelCategoria.textContent = "";
+
+    // Vacía el contenedor de productos
+    if (productosContainer) {
+      productosContainer.innerHTML = "";
+      productosContainer.classList.remove("oculto");
+      productosContainer.style.display = "block";
+    }
+
+    // Oculta pedidos
+    contenedorPedidos?.classList.add("oculto");
+    contenedorPedidos.style.display = "none";
+
+    // Muestra el inicio
+    pantallaInicio?.classList.remove("oculto");
+    pantallaProductos?.classList.add("oculto");
+  }
+
+  // === BOTÓN "INICIO" ===
+  if (inicioBtn) {
+    inicioBtn.addEventListener("click", () => {
+      resetearTodo();
+    });
+  }
+
+  // === BOTÓN "PEDIDOS" ===
+  pedidosBtn.addEventListener("click", () => {
+    // Primero resetea todo igual que inicio
+    resetearTodo();
+
+    // Luego de un pequeño delay (para que el DOM se actualice), muestra pedidos
+    setTimeout(() => {
+      pantallaInicio?.classList.add("oculto");
+      pantallaProductos?.classList.remove("oculto");
+      productosContainer?.classList.add("oculto");
+
+      contenedorPedidos?.classList.remove("oculto");
+      contenedorPedidos.style.display = "block";
+    }, 150);
+  });
+});
